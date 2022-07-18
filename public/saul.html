@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <script type="importmap">
+            {"imports": {
+                    "three": "./build/three.module.js"}}
+        </script>
+
+        <style>
+            h1{
+                font-family: monospace;
+            }
+            #grid{
+                display: grid;
+                grid-template-columns: 100px auto;
+            }
+            button{
+                font-size: 50px;
+                display: flex;
+                justify-content: center;
+                margin: 10px 10px 10px 10px;
+            }
+        </style>
+
+        <title>Saul</title>
+    </head>
+    <body>
+        <div id="grid">    
+            <div id="topPanel">
+                <button id="playBTN">🎶</button>
+            </div>
+            <div id="ThreeCanvas"></div>
+        </div>
+
+
+        <script type="module" src="saulScript.js"></script>
+    </body>
+
+
+</html>

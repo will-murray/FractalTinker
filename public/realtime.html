@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>Fractal Tinker</title>
+        
+        
+
+        <style>
+           body{
+            background-color: cornflowerblue;
+           }
+
+            #coordinates{
+                display: flex;
+                flex-flow: row;
+                grid-template-rows: auto;
+                justify-items: left;
+
+                font-family: monospace;
+                font-size: 10px;
+            }
+
+            
+
+            #outerGrid{
+                display: grid;
+                grid-template-columns: auto auto;
+                gap: 0px;
+                background-color: white;
+
+                border-style: hidden;
+                border-radius: 10px;
+                
+            }
+            #innerGrid{
+                display: grid;
+                grid-template-rows: 100px 100px auto;
+                background-color: cornflowerblue;
+
+                border-style: solid;
+                border-radius: 5px;
+            }
+
+            .GUIbox{
+                margin: 8px 8px 8px 8px ;
+                justify-content: center;
+
+
+                
+                font-family: monospace;
+                font-size: 15px;
+
+            }
+
+            #toggle{
+                display: flex;
+                justify-content: center;
+                font-family: monospace;
+                font-size: 20px;
+                padding: 10px 10px 10px 10px;
+            }
+
+            button:hover{
+                background-color: blueviolet;
+                color: white;
+            }
+            h1{
+                display: flex;
+                flex-flow: row;
+                justify-content: left;
+            }
+
+            #modeLabel{
+                border-bottom-style: solid;
+
+            }
+            
+            
+        </style>
+
+
+    </head>
+
+    <body>
+        <div id="coordinates">
+            <h1 id="xpos">Cursor: </h1>
+            <h1 id="ypos"></h1>
+        </div>
+        
+
+        <div id="outerGrid">
+            <canvas id="display"></canvas>
+            
+            <div id="innerGrid">
+                <div class="GUIbox">
+                    <h1 id="modeLabel">Mode: Julia</h1>
+                </div>
+                <div class="GUIbox">
+                    <button id="toggle">Toggle Mode</button>
+                    
+                </div>
+                    
+            </div>
+
+            
+        </div>
+        
+        <script src="./fractalLIB/CanvasUtil.js"></script>
+        <script type="module" src ="./fractalLIB/realtimeScript.js"></script>
+    </body>
+</html>

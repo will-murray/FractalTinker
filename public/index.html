@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Will's 3D Portfolio</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <style>
+            #header{
+                display: flex;
+                justify-content: center;
+                
+            }
+            #header h2{
+                font-family: monospace;
+                font-size: 30px;
+                padding: 10px 10px 10px 10px;
+                border-style: solid;
+                border-radius: 5px;
+            }
+            body{
+                background-color: cornflowerblue;
+                margin: 100px 100px 100px 100px;
+
+            }
+            #iconGrid{
+                display: grid;
+                grid-template-columns: auto auto;
+                justify-content: center;
+            }
+            .icon{
+                display:grid;
+                grid-template-rows: auto auto;
+
+            }
+            a{
+                font-size: 50px;
+            }
+            h1{
+                font-family: monospace;
+                color: cornflowerblue;
+
+            }
+
+            @media all and (max-width:800px){
+                #iconGrid{
+                display: grid;
+                grid-template-columns: auto;
+                justify-content: center;
+                row-gap: 10px
+            }  
+            }
+        </style>
+
+
+
+      
+        
+    </head>
+
+    <body>
+
+        <div id="header">
+            <h2>Programming Portfolio</h2>
+
+
+        </div>
+        <div id="iconGrid">
+            <div class="icon">
+                <img src="./misc/pyramidIcon.PNG" width="300" height="300" id="icon1">
+                <h1 id="label1">Serpinski Prism</h1>
+            
+            </div>
+            <div class ="icon">
+                
+                <img src="./misc/graphingIcon.PNG" width="300" height="300" id="icon2">
+                <h1 id="label2">3D Graphing Calculator</h1>
+
+            </div>  
+
+            <div class ="icon">
+                
+                <img src="./misc/saul.jfif" width="300" height="300" id="icon3">
+                <h1 id="label3">Saul</h1>
+
+            </div>  
+
+            <div class ="icon">
+                
+                <img src="./misc/toad.jfif" width="300" height="300" id="icon4">
+                <h1 id="label4">Game</h1>
+
+            </div>  
+
+             
+
+        </div>
+
+        <script src="./js/indexScript.js"></script>
+
+        
+        
+    </body>
+</html>
