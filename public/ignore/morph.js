@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
-import * as SceneUtil from './js/SceneUtil.js'
-import * as Builds from './js/Builds.js'
+import * as SceneUtil from '../js/SceneUtil.js'
+import * as Builds from '../js/Builds.js'
 //Setup Scene, Camera, Renderer
 const scene = new THREE.Scene();
 const camera = new SceneUtil.getPerpectiveCamera();

@@ -25,9 +25,10 @@
 
             }
             #iconGrid{
-                display: grid;
-                grid-template-columns: auto auto;
-                justify-content: center;
+                display: flex;
+                flex-flow: row-reverse;
+                justify-content: space-evenly;
+                
             }
             .icon{
                 display:grid;
@@ -70,14 +71,9 @@
             <div class="icon">
                 <img src="./misc/pyramidIcon.PNG" width="300" height="300" id="icon1">
                 <h1 id="label1">Serpinski Prism</h1>
+                <a>serpinski.html</a>
             
             </div>
-            <div class ="icon">
-                
-                <img src="./misc/graphingIcon.PNG" width="300" height="300" id="icon2">
-                <h1 id="label2">3D Graphing Calculator</h1>
-
-            </div>  
 
             <div class ="icon">
                 
@@ -97,7 +93,7 @@
 
         </div>
 
-        <script src="./js/indexScript.js"></script>
+        <script src="./fractalLIB/indexScript.js"></script>
 
         
         

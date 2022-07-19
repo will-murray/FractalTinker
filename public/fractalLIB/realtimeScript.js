@@ -1,30 +1,15 @@
 import Complex from "./Complex.js";
 import * as Conversion from "./Conversion.js"
-console.log("here");
-let MaxSeqLength = 40;
-let span = 0.5;
-origin = [0,0.5]
-let inc = span/60;
 
+let MaxSeqLength = 30;
+let span = 0.5;
+origin = [0,0];
+let inc = span/400;
 let state = 0;
 
 
-document.getElementById("toggle").onclick = toggleFunctionality;
-document.getElementById("display").onmousemove = executeFunctionality;
 
-let CANVAS = document.getElementById("display");
-
-
-
-
-function executeFunctionality(event){
-    if(state == 0){
-        drawJulia(event);
-    }
-}
-
-function toggleFunctionality(){
-    console.log("toggle")
+document.getElementById("toggle").onclick = function toggleFunctionality(){
     let modeLabel = document.getElementById("modeLabel")
     if(state == 1){
         state = 0;
@@ -32,88 +17,164 @@ function toggleFunctionality(){
     }else{
         state = 1;
         modeLabel.innerHTML = "Mode: Mandlebrot";
-        drawMandlebrot()
+        pixelPlot();
 
     }
-}
-
-
-
-function drawMandlebrot(){
-    let ctx = CANVAS.getContext('2d');
-
-    ctx.fillStyle = "white";
-    ctx.clearRect(0, 0, CANVAS.clientWidth, CANVAS.clientHeight)
-
-    for(let i =-1*(span + Math.abs(origin[0]));i<span + Math.abs(origin[0]);i+=inc){
-        for(let j =-1*(span + Math.abs(origin[1]));j<span + Math.abs(origin[1]);j+=inc){
-
-            let c = new Complex(i,j);
-            let result = sequenceLength(new Complex(0,0), c, 0);
-
-            if(result != MaxSeqLength){
-                ctx.fillStyle = getCol(result);
-                let px = Conversion.complexToPixels(i,j,span,CANVAS.width);
-                ctx.fillRect(px[0],px[1],3,3);
-
-
-            }
-        }
+};
+document.getElementById("display").onmousemove = function executeFunctionality(event){
+    if(state == 0){
+        fastJuliaPixelPlot(event);
     }
-    let orgPOINT = Conversion.complexToPixels(0,0,span,CANVAS.width);
-    ctx.fillStyle = "Black";
-    ctx.fillRect(orgPOINT[0],orgPOINT[1],15,15);
+};
+let CANVAS = document.getElementById("display");
+let ctx = CANVAS.getContext('2d');
 
-}
 
-function drawJulia(event){
-    let ctx = CANVAS.getContext('2d');
+function juliaPixelPlot(event){
+    ctx.clearRect(0,0 ,CANVAS.width, CANVAS.width);
+    let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
 
-    //clear the canvas
-    ctx.fillStyle = "white";
-    ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight)
 
-    //covert the clicked point to Complex, with 2 decimals of accuracy
     let click = Conversion.pixelsToComplex(event.x,event.y,span,CANVAS.width);
     let clickX = parseFloat(click[0]);
     let clickY = parseFloat(click[1]);
-    document.getElementById("xpos").innerHTML = "Cursor: "+ click[0] + ", ";
-    document.getElementById("ypos").innerHTML = click[1];
-
     let c = new Complex(clickX,clickY);
 
-
-    for(let i =-1*(span + Math.abs(origin[0]));i<span + Math.abs(origin[0]);i+=inc){
-        for(let j =-1*(span + Math.abs(origin[1]));j<span + Math.abs(origin[1]);j+=inc){
-
+    let iBound = span + Math.abs(origin[0]);
+    let jBound = span + Math.abs(origin[1])
+    for(let i =-1*(span + Math.abs(origin[0]));i<iBound;i+=inc){
+        for(let j =-1*(span + Math.abs(origin[1]));j<jBound;j+=inc){
+        
             let z = new Complex(i,j);
-            let result = sequenceLength(z,c,0);
+            let result = sequenceLengthIter(z, c, 0);
 
             if(result != MaxSeqLength){
-                ctx.fillStyle = getCol(result);
-                let px = Conversion.NScomplexToPixels(i,j,span,CANVAS.width);
-                ctx.fillRect(px[0],px[1],3,3);
+                let px = Conversion.complexToPixels(i,j,span,CANVAS.width);
+                let k = linearIndex(px[0],px[1]);
+                let col = colour(result);
 
-
-            }
-        }
+                imgData.data[k] = col[0];
+                imgData.data[k+1] = col[1];
+                imgData.data[k+2] = col[2];
+                imgData.data[k+3] = 255;
+            
+            }  
+        }   
+           
     }
+    ctx.putImageData(imgData,1,1);
+    
+}
 
-    let orgPOINT = Conversion.complexToPixels(0,0,span,CANVAS.width);
-    ctx.fillStyle = "Black";
-    ctx.fillRect(orgPOINT[0],orgPOINT[1],15,15);
+function fastJuliaPixelPlot(event){
+    ctx.clearRect(0,0 ,CANVAS.width, CANVAS.width);
+    let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
 
+
+    let click = Conversion.pixelsToComplex(event.x,event.y,span,CANVAS.width);
+    let clickX = parseFloat(click[0]);
+    let clickY = parseFloat(click[1]);
+    let c = new Complex(clickX,clickY);
+
+    let iBound = span + Math.abs(origin[0]);
+    let jBound = span + Math.abs(origin[1])
+    for(let i =-1*(span + Math.abs(origin[0]));i<iBound;i+=inc + inc){
+        for(let j =-1*(span + Math.abs(origin[1]));j<jBound;j+= inc+inc){
+        
+            let z = new Complex(i,j);
+            let result = sequenceLengthIter(z, c, 0);
+
+            if(result != MaxSeqLength){
+                let px = Conversion.complexToPixels(i,j,span,CANVAS.width);
+                let l1 = linearIndex(px[0],px[1]);      //upper left
+                let l2 = linearIndex(px[0] + 1, px[1])  //upper right
+                let l3 = linearIndex(px[0], px[1]+1)    //lower left
+                let l4 = linearIndex(px[0] + 1, px[1]+1)  //lower right
+
+                
+                let col = colour(result);
+
+                imgData.data[l1] = col[0];
+                imgData.data[l1+1] = col[1];
+                imgData.data[l1+2] = col[2];
+                imgData.data[l1+3] = 255;
+
+                imgData.data[l2] = col[0];
+                imgData.data[l2+1] = col[1];
+                imgData.data[l2+2] = col[2];
+                imgData.data[l2+3] = 255;
+
+                imgData.data[l3] = col[0];
+                imgData.data[l3+1] = col[1];
+                imgData.data[l3+2] = col[2];
+                imgData.data[l3+3] = 255;
+
+                imgData.data[l4] = col[0];
+                imgData.data[l4+1] = col[1];
+                imgData.data[l4+2] = col[2];
+                imgData.data[l4+3] = 255;
+            
+            }  
+        }   
+           
+    }
+    ctx.putImageData(imgData,1,1);
+    
 }
 
 
-//returns length of complex sequence rooted at c = (a+bi)
-    //if sequence length is not in [3,MaxSeqLength], return MaxSeqLength
-    //to indicate that the point wont be plotted
+function pixelPlot(){
+    ctx.clearRect(0,0 ,CANVAS.width, CANVAS.width);
+    let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
 
+    let iBound = span + Math.abs(origin[0]);
+    let jBound = span + Math.abs(origin[1])
+    for(let i =-1*(span + Math.abs(origin[0]));i<iBound;i+=inc){
+        for(let j =-1*(span + Math.abs(origin[1]));j<jBound;j+=inc){
+        
+            let c = new Complex(i,j);
+            let result = sequenceLength(new Complex(0,0), c, 0);
+
+            
+            if(result != MaxSeqLength){
+                let px = Conversion.complexToPixels(i,j,span,CANVAS.width);
+                let k = linearIndex(px[0],px[1]);
+                let col = colour(result);
+
+                imgData.data[k] = col[0];
+                imgData.data[k+1] = col[1];
+                imgData.data[k+2] = col[2];
+                imgData.data[k+3] = 255;
+            
+            }  
+        }   
+           
+    }
+    ctx.putImageData(imgData,10,10);
+
+
+}
+ 
+
+function sequenceLengthIter(z,c,iteration){
+    while(z.magnitude() < 2 && iteration < MaxSeqLength){
+        z.square()
+        let next = z;
+        next.plus(c);
+        iteration++;
+    }
+    
+    if(iteration>= MaxSeqLength || iteration <3){
+        return MaxSeqLength;
+    }
+
+    return iteration;
+
+}
 function sequenceLength(z,c,iteration){
 
     if(z.magnitude() > 2){
-        if(iteration < 3){
+        if(iteration < 6){
             return MaxSeqLength;
         }
         return iteration;
@@ -148,82 +209,31 @@ function getSequence(z,c,iteration,list){
 }
 
 
-function getCol(result){
-    if(result <=2){
-        return null;
-    }
-    if(result <4){
-        return "black";
-    }
-    if(result <5){
-        return "purple";
-    }
-    if(result <= 6){
-        return "red";
-    }
-    if(result <= 7){
-        return "darkorange";
-    }
-    if(result <= 8){
-        return "orange";
-    }
-    if(result <= 10){
-        return "yellow";
-    }
-    if(result <= 12){
-        return "blue";
-    }
-    if(result <= 14){
-        return "darkblue";
-    }
-    if(result <= 16){
-        return "green";
-    }
-    if(result <= 18){
-        return "lime";
-    }
-    if(result <= 19){
-        return "turquoise";
-    }
-    if(result <21){
-        return "purple";
-    }
-    if(result <= 23){
-        return "red";
-    }
-    if(result <= 25){
-        return "darkorange";
-    }
-    if(result <= 27){
-        return "orange";
-    }
-    if(result <= 29){
-        return "yellow";
-    }
-    if(result <= 31){
-        return "blue";
-    }
-    if(result <= 33){
-        return "darkblue";
-    }
-    if(result <= 35){
-        return "green";
-    }
-    if(result <= 37){
-        return "lime";
-    }
-
-    else{
-        return null;
-    }
+function linearIndex(x,y){
+    let rowIdx = (y*CANVAS.width*4)
+    let colIdx = 4*x
+    return rowIdx+colIdx;
+}
 
 
+function colour(n){
+    
+    let a = n*30;
+    let b = 0;
+    let c = 0;
+    if(a > 510){
+        c = a - 510;
+        b = a - 255;
+        return [a,b,c];
+
+    }else if(a > 255){
+        b = a-255;
+        return [a,b,0]
+    }
+    return [a,0,0];
 }
 
 
 
-
-
-
-
-
+console.log(sequenceLengthIter(new Complex(0,0), new Complex(0.3,0.3),0 ))
+console.log(sequenceLength(new Complex(0,0), new Complex(0.3,0.3),0 ))

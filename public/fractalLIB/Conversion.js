@@ -10,7 +10,6 @@ export function pixelsToComplex(clientX,clientY,span,dim){
 }
 
 export function complexToPixels(x,y,span,dim){
-    console.log("coversion!");
     x -=origin[0];
     y-=origin[1];
     
