@@ -22,13 +22,14 @@
             
 
             #outerGrid{
+
                 display: grid;
-                grid-template-columns:  auto auto;
-                gap: 0px;
+                grid-template-columns:  700px auto;
                 background-color: white;
 
                 border-style: hidden;
                 border-radius: 10px;
+                margin: 40px 40px 40px 40px;
                 
             }
             #innerGrid{
@@ -36,10 +37,20 @@
                 grid-template-rows: 100px 100px auto;
                 background-color: cornflowerblue;
 
-                border-style: solid;
-                border-radius: 5px;
+                border-right: solid;
+                border-top: solid;
+                border-bottom: solid;
+
+                
+            }
+            canvas{
+                border-left: solid;
+                border-top: solid;
+                border-bottom: solid;
             }
 
+            
+            
             .GUIbox{
                 margin: 8px 8px 8px 8px ;
                 justify-content: center;
@@ -50,10 +61,21 @@
                 font-size: 15px;
 
             }
+            #userInput{
+                display: flex;
+                flex-flow: column;
+                
+                border: solid;
+            }
 
-            
+            .inputField{
+                
+                display: flex;
+                flex-flow: row;
+                justify-content: left;
+            }
 
-            #toggle{
+            button{
                 display: flex;
                 justify-content: center;
                 font-family: monospace;
@@ -71,6 +93,13 @@
                 justify-content: left;
             }
 
+            .stat{
+                font-size: 20px;
+                font-family: monospace;
+                border-left: solid;
+                padding-left: 5px;
+            }
+
             #modeLabel{
                 border-bottom-style: solid;
 
@@ -83,23 +112,23 @@
     </head>
 
     <body>
-        <div id="coordinates">
-            <h1 id="xpos">Cursor: </h1>
-            <h1 id="ypos"></h1>
-        </div>
+        
         
 
         <div id="outerGrid">
-            <canvas id="display"></canvas>
+            <div class="gridItem">
+                <canvas id="display"></canvas>
+            </div>
             
-            <div id="innerGrid">
+            <div class="gridItem" id="innerGrid">
                 <div class="GUIbox">
-                    <h1 id="modeLabel">Mode: Julia</h1>
+                    <h1 id="modeLabel">Julia Mode</h1>
                 </div>
                 <div class="GUIbox">
                     <button id="toggle">Toggle Mode</button>
-                    
+                    <button id="zoomIN">Zoom IN</button>
                 </div>
+                
                     
             </div>
 

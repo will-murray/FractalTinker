@@ -1,6 +1,6 @@
 function initCanvas(){
     var canvas = document.getElementById("display");
-    canvas.height = 600;
+    canvas.height = 700;
     canvas.width = canvas.height;
 }
 
