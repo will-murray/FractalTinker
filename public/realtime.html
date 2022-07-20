@@ -5,8 +5,11 @@
         
 
         <style>
-           body{
-            background-color: cornflowerblue;
+
+        
+
+            body{
+                background-color: grey;
            }
 
             #coordinates{
@@ -40,6 +43,8 @@
                 border-right: solid;
                 border-top: solid;
                 border-bottom: solid;
+                border-color: cornflowerblue;
+                border-width: 5px;
 
                 
             }
@@ -47,12 +52,17 @@
                 border-left: solid;
                 border-top: solid;
                 border-bottom: solid;
+                border-color: cornflowerblue;
+                border-width: 5px;
             }
 
             
             
             .GUIbox{
-                margin: 8px 8px 8px 8px ;
+                display: flex;
+                flex-flow: column;
+                justify-content: space-evenly;
+                margin: 20px 20px 20px 20px ;
                 justify-content: center;
 
 
@@ -92,18 +102,39 @@
                 flex-flow: row;
                 justify-content: left;
             }
-
+            #stats{
+                display: flex;
+                flex-flow: row;
+                justify-content: left;
+            }
             .stat{
+                
                 font-size: 20px;
                 font-family: monospace;
                 border-left: solid;
                 padding-left: 5px;
+            }
+            .statColumn{
+                margin-right: 20px;
+                display: flex;
+                flex-flow: column;
             }
 
             #modeLabel{
                 border-bottom-style: solid;
 
             }
+
+            @media all and (max-width:800px){
+            #outerGrid{
+
+                display: flex;
+                flex-flow: column;
+
+                margin: 40px 40px 40px 40px;
+
+            }
+        }
             
             
         </style>
@@ -126,7 +157,8 @@
                 </div>
                 <div class="GUIbox">
                     <button id="toggle">Toggle Mode</button>
-                    <button id="zoomIN">Zoom IN</button>
+                    <button id="zoomIN">Zoom In</button>
+                    <button id="zoomOUT">Zoom Out</button>
                 </div>
                 
                     

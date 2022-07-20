@@ -3,19 +3,36 @@ import * as Conversion from "./Conversion.js"
 import * as GUI from "./ElementsUtil.js"
 
 
-let MaxSeqLength = 25;
+let MaxSeqLength = 50;
 let span = 3;
-origin = [0,0];
+origin = [0.3,0];
 let inc = span/400;
 let state = 0;
-
 
 let CANVAS = document.getElementById("display");
 let ctx = CANVAS.getContext('2d');
 
+let chain = [];
+let chainBuffer = [];
+
+
 
 document.body.onload = function load(){
+    
+
     document.getElementById("innerGrid").appendChild(GUI.getJuliaSetStatistics());
+}
+document.getElementById("zoomIN").onclick = function zoomIN(){
+    span -=0.2;
+    inc = span/400;
+    if(state==0){juliaPixelPlot(CANVAS.width/2,CANVAS.width/2);}
+    else{pixelPlot()}
+}
+document.getElementById("zoomOUT").onclick = function zoomOUT(){
+    span +=0.2;
+    inc = span/400;
+    if(state==0){juliaPixelPlot(CANVAS.width/2,CANVAS.width/2);}
+    else{pixelPlot()}
 }
 
 document.getElementById("toggle").onclick = function toggleFunctionality(){
@@ -24,6 +41,7 @@ document.getElementById("toggle").onclick = function toggleFunctionality(){
         state = 0;
         modeLabel.innerHTML = "Julia Mode";
         document.getElementById("innerGrid").appendChild(GUI.getJuliaSetStatistics());
+        juliaPixelPlot(CANVAS.width/2,CANVAS.width/2);
         
     }else{
         state = 1;
@@ -43,18 +61,44 @@ document.getElementById("display").onmousemove = function executeFunctionality(e
         document.getElementById("pixelsHit").innerHTML = "Pixels Hit: "+hit[0];
         document.getElementById("hitRatio").innerHTML = "Hit Ratio: "+(hit[0]/ 160000).toFixed(3);
         document.getElementById("exTime").innerHTML = "RenderTime (ms): "+t2;
-    }
-    else{
-        //render the sequence at mouse location
-            //find the sequence (list of pixel pairs)
+        document.getElementById("span").innerHTML = "Span: " +span.toFixed(2);
+        document.getElementById("frameRate").innerHTML = "frameRate (fps): " +(1000/t2).toFixed(1);
+        document.getElementById("pixelDepth").innerHTML = "Max Depth: "+MaxSeqLength;
 
     }
+    // else{
+    //     let click = Conversion.pixelsToComplex(event.x,event.y,span,CANVAS.width);
+    //     let clickX = parseFloat(click[0]);
+    //     let clickY = parseFloat(click[1]);
+    //     let c = new Complex(clickX,clickY);
+    //     let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
+
+    //     while(chainBuffer.length > 0){
+    //         let cur = chainBuffer.pop();
+    //         imgData.data[cur[0]] = cur[1];
+    //         imgData.data[cur[0] + 1] = cur[2];
+    //         imgData.data[cur[0] + 2] = cur[3];
+    //         imgData.data[cur[0] + 3] = cur[4];
+
+
+    //     }
+
+        
+    //     getSequence(new Complex(0,0), c ,0);
+    //     for(let i=0;i<chain.length;i++){
+    //         let px = Conversion.complexToPixels(chain[i].real,chain[i].img,span,CANVAS.width);
+    //         let idx = linearIndex(px[0],px[1]);
+    //         chainBuffer.push( [ idx, imgData.data[idx], imgData.data[idx+1], imgData.data[idx+2] ,imgData.data[idx+3] ] )
+    //     }
+    //     //chainBuffer is a list of lists where each inner list is as follows:
+    //         // [linearIDX, red, green, blue, alpha]
+
+
+    //     chain = [];
+        
+    // }
 };
-document.getElementById("zoomIN").onclick = function zoom(){
-    span -=0.2;
-    inc = span/400;
-    juliaPixelPlot(CANVAS.width/2,CANVAS.width/2);
-}
+
 
 
 
@@ -133,7 +177,6 @@ function pixelPlot(){
 
     let iBound = span + Math.abs(origin[0]);
     let jBound = span + Math.abs(origin[1]);
-    console.log(iBound,", ",jBound);
     for(let i =-1*(span + Math.abs(origin[0]));i<iBound;i+=inc){
         for(let j =-1*(span + Math.abs(origin[1]));j<jBound;j+=inc){
         
@@ -176,23 +219,22 @@ function sequenceLengthIter(z,c,iteration){
     return iteration;
 
 }
-function sequenceLength(z,c,iteration){
-
+function getSequence(z,c,iteration){
+    
     if(z.magnitude() > 2){
-        if(iteration < 6){
-            return MaxSeqLength;
-        }
-        return iteration;
+        return;
     }
-    else if(iteration >= MaxSeqLength){
-        return MaxSeqLength;
+    if(iteration > MaxSeqLength){
+        return;
     }
-    else{
-        z.square()
-        let next = z;
-        next.plus(c);
-        return sequenceLength(next,c,iteration+1)
-    }
+
+    chain.push(new Complex(z.real,z.img));
+    z.square()
+    let next = z;
+    next.plus(c);
+    getSequence(next,c,iteration+1)
+
+    
 }
 
 
