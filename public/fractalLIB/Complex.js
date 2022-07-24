@@ -21,9 +21,9 @@ export default class Complex {
         //this.real = (this.real/this.img) - (this.img/this.real);
         
         
-        //this.img = 2*real*this.img;
+        this.img = 2*real*this.img;
         //this.img = Math.tanh(2*real*this.img);
-        this.img = Math.sin(real)**2 *Math.sin(this.img)**2;
+        //this.img = Math.sin(real)**2 *Math.sin(this.img)**2;
     }
 
     plus(other){

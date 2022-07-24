@@ -3,9 +3,9 @@ import * as Conversion from "./Conversion.js"
 import * as GUI from "./ElementsUtil.js"
 
 
-let MaxSeqLength = 50;
-let span = 3;
-origin = [0.3,0];
+let MaxSeqLength = 40 ;
+let span = 2.5;
+let origon = [0,0];
 let inc = span/400;
 let state = 0;
 
@@ -13,7 +13,6 @@ let CANVAS = document.getElementById("display");
 let ctx = CANVAS.getContext('2d');
 
 let chain = [];
-let chainBuffer = [];
 
 
 
@@ -66,37 +65,7 @@ document.getElementById("display").onmousemove = function executeFunctionality(e
         document.getElementById("pixelDepth").innerHTML = "Max Depth: "+MaxSeqLength;
 
     }
-    // else{
-    //     let click = Conversion.pixelsToComplex(event.x,event.y,span,CANVAS.width);
-    //     let clickX = parseFloat(click[0]);
-    //     let clickY = parseFloat(click[1]);
-    //     let c = new Complex(clickX,clickY);
-    //     let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
-
-    //     while(chainBuffer.length > 0){
-    //         let cur = chainBuffer.pop();
-    //         imgData.data[cur[0]] = cur[1];
-    //         imgData.data[cur[0] + 1] = cur[2];
-    //         imgData.data[cur[0] + 2] = cur[3];
-    //         imgData.data[cur[0] + 3] = cur[4];
-
-
-    //     }
-
-        
-    //     getSequence(new Complex(0,0), c ,0);
-    //     for(let i=0;i<chain.length;i++){
-    //         let px = Conversion.complexToPixels(chain[i].real,chain[i].img,span,CANVAS.width);
-    //         let idx = linearIndex(px[0],px[1]);
-    //         chainBuffer.push( [ idx, imgData.data[idx], imgData.data[idx+1], imgData.data[idx+2] ,imgData.data[idx+3] ] )
-    //     }
-    //     //chainBuffer is a list of lists where each inner list is as follows:
-    //         // [linearIDX, red, green, blue, alpha]
-
-
-    //     chain = [];
-        
-    // }
+    
 };
 
 
@@ -107,18 +76,18 @@ function juliaPixelPlot(x,y){
     let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
 
 
-    let click = Conversion.pixelsToComplex(x,y,span,CANVAS.width);
+    let click = Conversion.pixelsToComplex(x,y,span,CANVAS.width,origon);
     let clickX = parseFloat(click[0]);
     let clickY = parseFloat(click[1]);
     let c = new Complex(clickX,clickY);
 
-    let iBound = span + Math.abs(origin[0]);
-    let jBound = span + Math.abs(origin[1]);
+    let iBound = span + Math.abs(origon[0]);
+    let jBound = span + Math.abs(origon[1]);
 
     let avgMagnitude = 0;
     let pixelsHit = 0;
-    for(let i =-1*(span + Math.abs(origin[0]));i<iBound;i+=inc + inc){
-        for(let j =-1*(span + Math.abs(origin[1]));j<jBound;j+= inc+inc){
+    for(let i =-1*iBound;i<iBound;i+=inc + inc){
+        for(let j =-1*jBound;j<jBound;j+= inc+inc){
         
             let z = new Complex(i,j);
             let result = sequenceLengthIter(z, c, 0);
@@ -127,7 +96,7 @@ function juliaPixelPlot(x,y){
                 pixelsHit++;
                 
 
-                let px = Conversion.complexToPixels(i,j,span,CANVAS.width);
+                let px = Conversion.complexToPixels(i,j,span,CANVAS.width,origon);
                 let l1 = linearIndex(px[0],px[1]);      //upper left
                 let l2 = linearIndex(px[0] + 1, px[1])  //upper right
                 let l3 = linearIndex(px[0], px[1]+1)    //lower left
@@ -141,22 +110,22 @@ function juliaPixelPlot(x,y){
                 
 
                 imgData.data[l1] = col;
-                imgData.data[l1+1] = col;
+                imgData.data[l1+1] = 0
                 imgData.data[l1+2] = 0;
                 imgData.data[l1+3] = a;
 
                 imgData.data[l2] = col;
-                imgData.data[l2+1] = col;
+                imgData.data[l2+1] = 0;
                 imgData.data[l2+2] = 0;
                 imgData.data[l2+3] = a;
 
                 imgData.data[l3] = col;
-                imgData.data[l3+1] = col;
+                imgData.data[l3+1] = 0;
                 imgData.data[l3+2] = 0;
                 imgData.data[l3+3] = a;
 
                 imgData.data[l4] = col;
-                imgData.data[l4+1] = col;
+                imgData.data[l4+1] = 0;
                 imgData.data[l4+2] = 0;
                 imgData.data[l4+3] = a;
             
@@ -175,10 +144,10 @@ function pixelPlot(){
     ctx.clearRect(0,0 ,CANVAS.width, CANVAS.width);
     let imgData = ctx.getImageData(0,0,CANVAS.width,CANVAS.width);
 
-    let iBound = span + Math.abs(origin[0]);
-    let jBound = span + Math.abs(origin[1]);
-    for(let i =-1*(span + Math.abs(origin[0]));i<iBound;i+=inc){
-        for(let j =-1*(span + Math.abs(origin[1]));j<jBound;j+=inc){
+    let iBound = span + Math.abs(origon[0]);
+    let jBound = span + Math.abs(origon[1]);
+    for(let i =-iBound;i<iBound;i+=inc){
+        for(let j = -1*jBound; j<jBound; j+=inc){
         
             let c = new Complex(i,j);
             let result = sequenceLengthIter(new Complex(0,0), c, 0);
@@ -187,11 +156,11 @@ function pixelPlot(){
             if(result != MaxSeqLength){
                 let px = Conversion.complexToPixels(i,j,span,CANVAS.width);
                 let k = linearIndex(px[0],px[1]);
-                let col = colour(result);
+                
 
-                imgData.data[k] = col[0];
-                imgData.data[k+1] = col[1];
-                imgData.data[k+2] = col[2];
+                imgData.data[k] = result*8;
+                imgData.data[k+1] = 0;
+                imgData.data[k+2] = 0;
                 imgData.data[k+3] = 255;
             
             }  
@@ -247,11 +216,6 @@ function linearIndex(x,y){
 
 
 function colour(n){
-    if(n*15 > 255){
-        return [255,n*9,n*2];
-    }else if(n*9 > 255){
-        return [255,255,n*2];
-    }
-    return [n*15, n*9, n*2];
+    return n*5
 }
 
