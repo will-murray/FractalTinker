@@ -78,12 +78,7 @@
                 border: solid;
             }
 
-            .inputField{
-                
-                display: flex;
-                flex-flow: row;
-                justify-content: left;
-            }
+
 
             button{
                 display: flex;
@@ -102,37 +97,18 @@
                 flex-flow: row;
                 justify-content: left;
             }
-            #stats{
-                display: grid;
-                grid-template-columns: 300px 300px;
-            }
-            .stat{
-                
-                font-size: 20px;
-                font-family: monospace;
-                border-left: solid;
-                padding-left: 5px;
-            }
-            .statColumn{
-                margin-right: 20px;
-                display: flex;
-                flex-flow: column;
-            }
-
-            #modeLabel{
-                border-bottom-style: solid;
-
-            }
+            
+            
 
             @media all and (max-width:800px){
-            #outerGrid{
+                #outerGrid{
 
-                display: flex;
-                flex-flow: column;
+                    display: flex;
+                    flex-flow: column;
 
-                margin: 40px 40px 40px 40px;
+                    margin: 40px 40px 40px 40px;
 
-            }
+                }
         }
             
             
@@ -156,8 +132,6 @@
                 </div>
                 <div class="GUIbox">
                     <button id="toggle">Toggle Mode</button>
-                    <button id="zoomIN">Zoom In</button>
-                    <button id="zoomOUT">Zoom Out</button>
                 </div>
                 
                     
@@ -167,6 +141,6 @@
         </div>
         
         <script src="./fractalLIB/CanvasUtil.js"></script>
-        <script type="module" src ="./fractalLIB/realtimeScript.js"></script>
+        <script type= "module" src ="./fractalLIB/realtime.js"></script>
     </body>
 </html>

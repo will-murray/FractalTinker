@@ -1,14 +1,19 @@
+
 import Complex from "./Complex.js";
 import * as Conversion from "./Conversion.js"
 
-class FractalCanvas{
+
+export default class FractalCanvas{
     
 
     constructor(){
+        this.MAXSEQLENGTH = 150;
         this.size = 700;
-        this.this.this.span = 1;
+        this.span = 1;
         this.origon = [0,0];
-        this.inc = this.span/400;
+        this.inc = this.span/366;
+        this.state = 0;
+        
 
         this.canvas = document.getElementById("display");
         this.ctx = this.canvas.getContext('2d');
@@ -16,77 +21,94 @@ class FractalCanvas{
 
     }
 
-    initCanvas(){
-        let canvas = document.getElementById("display");
-        this.size = this.size;
-        canvas.height = this.size;
+    init(){
+        this.canvas.height = this.size;
+        this.canvas.width = this.size;
+        this.juliaSet(this.size/2,this.size/2);
     }
+
+    toggle(){
+        let modeLabel = document.getElementById("modeLabel");
+        if(this.state == 1){
+            this.state = 0;
+            modeLabel.innerHTML = "Julia Mode";
+            this.juliaSet(this.size, this.size);
+          
+        }else{
+            this.state = 1;
+            modeLabel.innerHTML = "Mandlebrot Mode";
+            this.mandlebrotSet();
+        }
+    }
+
+    
 
     juliaSet(x,y){
         this.ctx.clearRect(0,0 ,this.size, this.size);
         let imgData = this.ctx.getImageData(0,0,this.size,this.size);
 
 
-        let click = Conversion.pixelsToComplex(x,y,this.this.this.span,this.size);
+        let click = Conversion.pixelsToComplex(x,y,this.span,this.size,this.origon);
         let clickX = parseFloat(click[0]);
         let clickY = parseFloat(click[1]);
         let c = new Complex(clickX,clickY);
 
-        let iBound = this.span + Math.abs(this.origin[0]);
-        let jBound = this.span + Math.abs(this.origin[1]);
+        let iBound = this.span + Math.abs(this.origon[0]);
+        let jBound = this.span + Math.abs(this.origon[1]);
+        
+        let count = 0;
 
-        let avgMagnitude = 0;
-        let pixelsHit = 0;
-        for(let i =-1*iBound;i<iBound;i+=inc + inc){
-            for(let j =-1*jBound;j<jBound;j+= inc+inc){
-            
+        for(let i =-1*iBound;i<iBound;i+= (this.inc + this.inc) ){
+           
+
+            for(let j =-1*jBound;j<jBound;j+= (this.inc+this.inc)){
+                
                 let z = new Complex(i,j);
-                let result = sequenceLengthIter(z, c, 0);
-                avgMagnitude+=result;
-                if(result != MaxSeqLength){
-                    pixelsHit++;
+                let result = this.sequenceLengthIter(z, c, 0);
+                if(result < this.MAXSEQLENGTH){
                     
 
-                    let px = Conversion.complexToPixels(i,j,this.span,this.size);
-                    let l1 = linearIndex(px[0],px[1]);      //upper left
-                    let l2 = linearIndex(px[0] + 1, px[1])  //upper right
-                    let l3 = linearIndex(px[0], px[1]+1)    //lower left
-                    let l4 = linearIndex(px[0] + 1, px[1]+1)  //lower right
+                    let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
+                    let l1 = this.linearIndex(px[0],px[1]);      //upper left
+                    let l2 = this.linearIndex(px[0] + 1, px[1])  //upper right
+                    let l3 = this.linearIndex(px[0], px[1]+1)    //lower left
+                    let l4 = this.linearIndex(px[0] + 1, px[1]+1)  //lower right
 
-                    let col = result*8;
+                    let col = this.colour(result);
                     let a = 255;
-                    if(col > 255){
-                        a=0;
-                    }
+                    
                     
 
-                    imgData.data[l1] = col;
-                    imgData.data[l1+1] = 0
-                    imgData.data[l1+2] = 0;
+                    imgData.data[l1] = col[0];
+                    imgData.data[l1+1] = col[1];
+                    imgData.data[l1+2] = col[2];
                     imgData.data[l1+3] = a;
 
-                    imgData.data[l2] = col;
-                    imgData.data[l2+1] = 0;
-                    imgData.data[l2+2] = 0;
+                    imgData.data[l2] = col[0];
+                    imgData.data[l2+1] = col[1];
+                    imgData.data[l2+2] = col[2];
                     imgData.data[l2+3] = a;
 
-                    imgData.data[l3] = col;
-                    imgData.data[l3+1] = 0;
-                    imgData.data[l3+2] = 0;
+                    imgData.data[l3] = col[0];
+                    imgData.data[l3+1] = col[1];
+                    imgData.data[l3+2] = col[2];
                     imgData.data[l3+3] = a;
 
-                    imgData.data[l4] = col;
-                    imgData.data[l4+1] = 0;
-                    imgData.data[l4+2] = 0;
+                    imgData.data[l4] = col[0];
+                    imgData.data[l4+1] = col[1];
+                    imgData.data[l4+2] = col[2];
                     imgData.data[l4+3] = a;
                 
                 }  
+                count+=1;
+
             }   
             
         }
-        ctx.putImageData(imgData,1,1);
+        this.ctx.putImageData(imgData,1,1);
 
-        return [pixelsHit,avgMagnitude/160000];
+        console.log(count,",",this.size**2);
+        
         
     }
 
@@ -94,57 +116,92 @@ class FractalCanvas{
 
     mandlebrotSet(){
 
-        ctx.clearRect(0,0 ,this.size, this.size);
-        let imgData = ctx.getImageData(0,0,this.size,this.size);
+        this.ctx.clearRect(0,0 ,this.size, this.size);
+        let imgData = this.ctx.getImageData(0,0,this.size,this.size);
 
-        let iBound = this.span + Math.abs(this.origin[0]);
-        let jBound = this.span + Math.abs(this.origin[1]);
-        for(let i =-1*iBound;i<iBound;i+=inc){
-            for(let j =-1*jBound;j<jBound;j+=inc){
+        let iBound = this.span + Math.abs(this.origon[0]);
+        let jBound = this.span + Math.abs(this.origon[1]);
+        console.log("ib :",iBound,",jb: ",jBound)
+        let count = 0;
+        for(let i =-1*iBound;i<iBound;i+=this.inc){
+            for(let j =-1*jBound;j<jBound;j+=this.inc){
             
                 let c = new Complex(i,j);
-                let result = sequenceLengthIter(new Complex(0,0), c, 0);
+                let result = this.sequenceLengthIter(new Complex(0,0), c, 0);
 
                 
-                if(result != MaxSeqLength){
-                    let px = Conversion.complexToPixels(i,j,this.this.span,this.size);
-                    let k = linearIndex(px[0],px[1]);
+                if(result != this.MAXSEQLENGTH){
+                    let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
+                    let k = this.linearIndex(px[0],px[1]);
+                    let col = this.colour(result);
                     
-
-                    imgData.data[k] = result*8;
-                    imgData.data[k+1] = 0;
-                    imgData.data[k+2] = 0;
+                    imgData.data[k] = col[0];
+                    imgData.data[k+1] = col[1];
+                    imgData.data[k+2] = col[2];
                     imgData.data[k+3] = 255;
-                
-                }  
+                }
+                count+=1;  
             }   
             
         }
-        ctx.putImageData(imgData,10,10);
+        this.ctx.putImageData(imgData,10,10);
+        console.log(count,",",this.size**2);
+        console.log(iBound**2);
+
 
 
     }
 
 
     sequenceLengthIter(z,c,iteration){
-        while(z.magnitude() < 2 && iteration < MaxSeqLength){
+        while(z.magnitude() < 2 && iteration < this.MAXSEQLENGTH){
             z.square()
             let next = z;
             next.plus(c);
             iteration++;
         }
         
-        if(iteration>= MaxSeqLength || iteration <3){
-            return MaxSeqLength;
+        if(iteration > this.MAXSEQLENGTH || iteration <3){
+            return this.MAXSEQLENGTH;
         }
     
         return iteration;
     
     }
 
-}
+    //fix: Linear index w
+    linearIndex(x,y){
+        
+        let rowIdx = (y*this.size*4)
+        let colIdx = 4*x
+        
+        return rowIdx+colIdx;
+    }
 
 
 
+    
+    
+    colour(t){
+        // return [    
+        //             12*parseInt((Math.sqrt(6*t))),
+        //             15*parseInt(Math.cos(t)),
+        //             8*parseInt(2*(t))
+        //         ];
+    //     return [    
+    //     (6*parseInt(t)),
+    //     150*Math.abs(Math.cos((6*parseInt(t)))),
+    //     150*Math.abs(Math.sin(((6*parseInt(t)))))
+    // ];
 
- 
+    return [    
+            150*Math.abs(Math.cos((6*parseInt(t)))),
+            150*Math.abs(Math.sin(((6*parseInt(t))))),
+            (6*parseInt(t))
+
+        ];
+      
+    }
+
+
+};

@@ -7,51 +7,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         <style>
+            body{
+                display: grid;
+                grid-template-rows: 250px auto;
+                background-color: cornflowerblue;
+
+            }
             #header{
                 display: flex;
+                flex-flow:row;
                 justify-content: center;
-                
-            }
-            #header h2{
                 font-family: monospace;
-                font-size: 30px;
-                padding: 10px 10px 10px 10px;
-                border-style: solid;
-                border-radius: 5px;
-            }
-            body{
-                background-color: cornflowerblue;
-                margin: 100px 100px 100px 100px;
 
             }
-            #iconGrid{
+
+            #iconBox{
                 display: flex;
-                flex-flow: row-reverse;
+                flex-flow:row;
                 justify-content: space-evenly;
-                
+                padding: 30px 30px 30px 30px;
             }
-            .icon{
-                display:grid;
-                grid-template-rows: auto auto;
 
-            }
             a{
-                font-size: 50px;
+                font-family:monospace;
+                font-size: 100px;
+                text-decoration: none;
             }
-            h1{
-                font-family: monospace;
-                color: cornflowerblue;
-
-            }
-
-            @media all and (max-width:800px){
-                #iconGrid{
-                display: grid;
-                grid-template-columns: auto;
-                justify-content: center;
-                row-gap: 10px
-            }  
-            }
+            
         </style>
 
 
@@ -64,36 +46,27 @@
 
         <div id="header">
             <h2>Programming Portfolio</h2>
-
-
         </div>
-        <div id="iconGrid">
+        <div id="iconBox">
+            <div class ="icon">
+                <a href="serpinski.html">🦥</a>
+            </div>
+
             <div class="icon">
-                <img src="./misc/pyramidIcon.PNG" width="300" height="300" id="icon1">
-                <h1 id="label1">Serpinski Prism</h1>
-                <a>serpinski.html</a>
-            
+                <a href="realtime.html" id="label1">💥</a>
             </div>
 
             <div class ="icon">
-                
-                <img src="./misc/saul.jfif" width="300" height="300" id="icon3">
-                <h1 id="label3">Saul</h1>
-
+                <a href="saul.html" id="label3">🦔</a>
             </div>  
 
-            <div class ="icon">
-                
-                <img src="./misc/toad.jfif" width="300" height="300" id="icon4">
-                <h1 id="label4">Game</h1>
 
-            </div>  
 
              
 
         </div>
 
-        <script src="./fractalLIB/indexScript.js"></script>
+        <script src="./indexScript.js"></script>
 
         
         
