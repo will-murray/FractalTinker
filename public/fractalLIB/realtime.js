@@ -5,8 +5,8 @@ document.body.onload = function initCanvas(){
     complexPlane.init();
 }
 
-document.getElementById("toggle").onclick = function toggleFunctionality(){
-    complexPlane.toggle();
+document.getElementById("changeModeBtn").onclick = function toggleFunctionality(){
+    complexPlane.changeMode();
 };
 
 complexPlane.canvas.onmousemove = function getJuliaFrame(event){
@@ -14,7 +14,14 @@ complexPlane.canvas.onmousemove = function getJuliaFrame(event){
         complexPlane.juliaSet(event.x,event.y);
 
     }
+
+    
 }
+
+
+
+
+
 
 
 

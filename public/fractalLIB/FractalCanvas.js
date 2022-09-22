@@ -1,7 +1,7 @@
 
 import Complex from "./Complex.js";
 import * as Conversion from "./Conversion.js"
-
+import DFS from "./DFS.js";
 
 export default class FractalCanvas{
     
@@ -9,10 +9,15 @@ export default class FractalCanvas{
     constructor(){
         this.MAXSEQLENGTH = 150;
         this.size = 700;
-        this.span = 1;
+        this.span = 0.5
         this.origon = [0,0];
         this.inc = this.span/366;
         this.state = 0;
+        this.stateMap = {
+            0 : "Julia",
+            1 : "Mandlebrot",
+            2 : "Depth"
+        }
         
 
         this.canvas = document.getElementById("display");
@@ -25,23 +30,68 @@ export default class FractalCanvas{
         this.canvas.height = this.size;
         this.canvas.width = this.size;
         this.juliaSet(this.size/2,this.size/2);
+
+        
     }
 
-    toggle(){
-        let modeLabel = document.getElementById("modeLabel");
-        if(this.state == 1){
+    changeMode(){
+        if(this.state == 2){
+            this.disableDepthMode();
             this.state = 0;
-            modeLabel.innerHTML = "Julia Mode";
-            this.juliaSet(this.size, this.size);
-          
         }else{
-            this.state = 1;
-            modeLabel.innerHTML = "Mandlebrot Mode";
-            this.mandlebrotSet();
+            this.state += 1;
         }
+        document.getElementById("modeLabel").innerHTML = this.stateMap[this.state];
+        if(this.state == 0){
+             this.juliaSet(this.size/2,this.size/2);
+        }
+        else if(this.state == 1){
+            this.mandlebrotSet()
+            DFS(this.getRawGridData(9));
+        }
+        else{
+            this.enableDepthMode();
+        }
+
+
+    }
+
+   
+
+    enableDepthMode(){
+        
+        this.MAXSEQLENGTH = 10;
+        this.mandlebrotSet()
+        let zoomBTN = document.createElement("button");
+        zoomBTN.innerHTML = "ZOOM";
+        zoomBTN.id = "zoomBTN";
+
+        let depthGage = document.createElement("h2");
+        depthGage.id = "depthGage";
+        depthGage.innerHTML = "Maximum Depth = " +this.MAXSEQLENGTH;
+        
+
+        document.getElementById("BtnBox").appendChild(zoomBTN);
+        document.getElementById("BtnBox").appendChild(depthGage);
+
+        zoomBTN.addEventListener("click", () =>{
+            this.MAXSEQLENGTH+=10;
+            this.mandlebrotSet();
+            document.getElementById("depthGage").innerHTML = "Maximum Depth = " +this.MAXSEQLENGTH;
+        });
     }
 
     
+
+
+    disableDepthMode(){
+        let BtnBox = document.getElementById("BtnBox");
+        BtnBox.removeChild(BtnBox.lastChild);
+        BtnBox.removeChild(BtnBox.lastChild);
+
+
+        this.MAXSEQLENGTH = 150;
+    }
 
     juliaSet(x,y){
         this.ctx.clearRect(0,0 ,this.size, this.size);
@@ -56,7 +106,6 @@ export default class FractalCanvas{
         let iBound = this.span + Math.abs(this.origon[0]);
         let jBound = this.span + Math.abs(this.origon[1]);
         
-        let count = 0;
 
         for(let i =-1*iBound;i<iBound;i+= (this.inc + this.inc) ){
            
@@ -65,10 +114,11 @@ export default class FractalCanvas{
                 
                 let z = new Complex(i,j);
                 let result = this.sequenceLengthIter(z, c, 0);
+                let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
                 if(result < this.MAXSEQLENGTH){
                     
 
-                    let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
+                    // let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
                     let l1 = this.linearIndex(px[0],px[1]);      //upper left
                     let l2 = this.linearIndex(px[0] + 1, px[1])  //upper right
                     let l3 = this.linearIndex(px[0], px[1]+1)    //lower left
@@ -100,19 +150,42 @@ export default class FractalCanvas{
                     imgData.data[l4+3] = a;
                 
                 }  
-                count+=1;
 
             }   
             
         }
         this.ctx.putImageData(imgData,1,1);
 
-        console.log(count,",",this.size**2);
         
         
     }
 
+    getRawGridData(limit){
+        let result = []
 
+        let iBound = this.span + Math.abs(this.origon[0]);
+        let jBound = this.span + Math.abs(this.origon[1]);
+        for(let i =-1*iBound;i<iBound;i+=this.inc){
+            let currentrow = []
+            for(let j =-1*jBound;j<jBound;j+=this.inc){
+            
+                let c = new Complex(i,j);
+                let result = this.DFSsequenceLength(new Complex(0,0), c, 0);
+
+                
+                if(result < limit){
+                    
+                    currentrow.push(1)
+
+                }else{
+                    currentrow.push(0)
+                }
+            }
+            result.push(currentrow);   
+            
+        }
+        return result;
+    }
 
     mandlebrotSet(){
 
@@ -121,8 +194,6 @@ export default class FractalCanvas{
 
         let iBound = this.span + Math.abs(this.origon[0]);
         let jBound = this.span + Math.abs(this.origon[1]);
-        console.log("ib :",iBound,",jb: ",jBound)
-        let count = 0;
         for(let i =-1*iBound;i<iBound;i+=this.inc){
             for(let j =-1*jBound;j<jBound;j+=this.inc){
             
@@ -133,6 +204,7 @@ export default class FractalCanvas{
                 if(result != this.MAXSEQLENGTH){
                     let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
                     let k = this.linearIndex(px[0],px[1]);
+                    
                     let col = this.colour(result);
                     
                     imgData.data[k] = col[0];
@@ -140,13 +212,10 @@ export default class FractalCanvas{
                     imgData.data[k+2] = col[2];
                     imgData.data[k+3] = 255;
                 }
-                count+=1;  
             }   
             
         }
         this.ctx.putImageData(imgData,10,10);
-        console.log(count,",",this.size**2);
-        console.log(iBound**2);
 
 
 
@@ -169,7 +238,23 @@ export default class FractalCanvas{
     
     }
 
-    //fix: Linear index w
+    DFSsequenceLength(z,c,iteration){
+        while(z.magnitude() < 2 && iteration < this.MAXSEQLENGTH){
+            z.square()
+            let next = z;
+            next.plus(c);
+            iteration++;
+        }
+        
+        if(iteration > this.MAXSEQLENGTH){
+            return this.MAXSEQLENGTH;
+        }
+    
+        return iteration;
+    
+    }
+
+    
     linearIndex(x,y){
         
         let rowIdx = (y*this.size*4)
@@ -195,12 +280,13 @@ export default class FractalCanvas{
     // ];
 
     return [    
-            150*Math.abs(Math.cos((6*parseInt(t)))),
-            150*Math.abs(Math.sin(((6*parseInt(t))))),
-            (6*parseInt(t))
+            (6*parseInt(t)),
+            150*Math.abs( Math.cos((6*parseInt(t))) **2 ),
+            150*Math.abs( Math.sin((6*parseInt(t))) **2 )
+
+
 
         ];
-      
     }
 
 
