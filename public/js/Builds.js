@@ -192,3 +192,26 @@ export function addGround(scene){
 }
 
 
+export function addAxis(scene){
+    let xmat = new THREE.LineBasicMaterial( {color:0x0000ff});
+    let xpoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(10,0,0)]
+    let xgeo = new THREE.BufferGeometry().setFromPoints(xpoints);
+    let xline = new THREE.Line(xgeo,xmat);
+
+    let ymat = new THREE.LineBasicMaterial( {color:0x00ff00});
+    let ypoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,10)]
+    let ygeo = new THREE.BufferGeometry().setFromPoints(ypoints);
+    let yline = new THREE.Line(ygeo,ymat);
+
+
+
+    let zmat = new THREE.LineBasicMaterial( {color:0xff0000});
+    let zpoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(0,10,0)]
+    let zgeo = new THREE.BufferGeometry().setFromPoints(zpoints);
+    let zline = new THREE.Line(zgeo,zmat);
+
+    scene.add(xline);
+    scene.add(yline);
+    scene.add(zline);
+
+}

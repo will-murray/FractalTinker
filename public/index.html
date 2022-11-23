@@ -8,32 +8,78 @@
         
         <style>
             body{
+                
+
                 display: grid;
-                grid-template-rows: 250px auto;
+                grid-template-rows: 150px auto auto;
                 background-color: cornflowerblue;
 
             }
+
+            
+
             #header{
                 display: flex;
                 flex-flow:row;
                 justify-content: center;
                 font-family: monospace;
+                
 
             }
+
+            
 
             #iconBox{
                 display: flex;
                 flex-flow:row;
                 justify-content: space-evenly;
+                
+            }
+
+            .icon{
+                border: solid;
+                border-color: whitesmoke;
+                border-radius: 10px;
+                background-color: whitesmoke;
+                display: flex;
+                flex-flow: column;
                 padding: 30px 30px 30px 30px;
             }
 
             a{
+                
                 font-family:monospace;
-                font-size: 100px;
+                font-size: 25px;
                 text-decoration: none;
             }
+
+            p{  
+                font-family: monospace;
+                font-size: 40px;
+            }
             
+            #GalleryBox{
+                margin-top: 50px;
+                padding-left: 150px;
+                padding-right: 150px;
+
+                display: flex;
+                flex-flow: column;
+                justify-content: space-between;
+            }
+
+            .GalleryItem{
+                padding-left: 30px;
+                padding-right: 30px;
+
+                background-color: rgb(111, 0, 255);
+
+                border: solid;
+                border-color: whitesmoke;
+                border-radius: 10px;
+
+
+            }
         </style>
 
 
@@ -44,27 +90,46 @@
 
     <body>
 
-        <div id="header">
-            <h2>Programming Portfolio</h2>
-        </div>
-        <div id="iconBox">
-            <div class ="icon">
-                <a href="serpinski.html">🦥</a>
+        <div id="Wrapper">
+
+            <div id="header">
+                <h2>Programming Portfolio</h2>
+            </div>
+            <div id="iconBox">
+                <div class ="icon">
+                    <a href="serpinski.html">3D Serpinksi Triangle</a>
+                    <img src="misc/pyramidIcon.PNG" width="300px" height = "200px" alt="">
+                </div>
+    
+                <div class="icon">
+                    <a href="realtime.html" id="label1">Fractal Sandbox</a>
+                    <img src="misc/satanic.PNG" width="300px" height = "200px" alt="">
+    
+                </div>
+    
+                <div class ="icon">
+                    <a href="saul.html" id="label3">3D Parametric Surfaces</a>
+                    <img src="misc/para.png" width="300px" height = "200px" alt="">
+    
+                </div>  
+    
+                
+    
+    
+    
+                 
+    
+            </div>
+    
+            <div id="GalleryBox">
+                <div id="GalleryTitle" class="GalleryItem"><p>Gallery</p></div>
+                
+    
+    
             </div>
 
-            <div class="icon">
-                <a href="realtime.html" id="label1">💥</a>
-            </div>
-
-            <div class ="icon">
-                <a href="saul.html" id="label3">🦔</a>
-            </div>  
-
-
-
-             
-
         </div>
+        
 
         <script src="./indexScript.js"></script>
 
