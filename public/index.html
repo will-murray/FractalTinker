@@ -8,12 +8,12 @@
         
         <style>
             body{
-                
-
-                display: grid;
-                grid-template-rows: 150px auto auto;
-                background-color: cornflowerblue;
-
+                 background-color: black;
+            }
+            #Wrapper{
+                display: flex;
+                flex-flow: column;
+                justify-content: space-around;
             }
 
             
@@ -21,31 +21,33 @@
             #header{
                 display: flex;
                 flex-flow:row;
-                justify-content: center;
+                justify-content: space-evenly;
                 font-family: monospace;
                 
 
             }
 
-            
+            #Title{
+                font-size: 40px;
+                border-bottom: solid;
+                color: white;
+            }            
 
-            #iconBox{
-                display: flex;
-                flex-flow:row;
+            #mainBox{
+                display:grid;
+                grid-template-columns: auto auto;
                 justify-content: space-evenly;
                 
             }
 
-            .icon{
+            #icon{
                 border: solid;
                 border-color: whitesmoke;
                 border-radius: 10px;
                 background-color: whitesmoke;
                 display: flex;
                 flex-flow: column;
-                padding: 30px 30px 30px 30px;
             }
-
             a{
                 
                 font-family:monospace;
@@ -53,33 +55,32 @@
                 text-decoration: none;
             }
 
-            p{  
+            #GalleryBox p{  
                 font-family: monospace;
-                font-size: 40px;
+                font-size: 30px;
             }
             
             #GalleryBox{
-                margin-top: 50px;
-                padding-left: 150px;
-                padding-right: 150px;
-
-                display: flex;
-                flex-flow: column;
-                justify-content: space-between;
-            }
-
-            .GalleryItem{
-                padding-left: 30px;
-                padding-right: 30px;
-
-                background-color: rgb(111, 0, 255);
-
                 border: solid;
-                border-color: whitesmoke;
-                border-radius: 10px;
+                border-radius: 8px;
+                background-color: cornflowerblue;
+                display: flex;
+                flex-flow: row;
+                justify-content: center;
 
+
+                
+            }
+            .box{
+                padding-left: 100px;
+                padding-right: 100px;
+                padding-top: 50px;
+                padding-bottom: 50px;
 
             }
+            
+            
+            
         </style>
 
 
@@ -93,46 +94,27 @@
         <div id="Wrapper">
 
             <div id="header">
-                <h2>Programming Portfolio</h2>
+                <h2 id="Title">Fractal Geometry Visualization Tool</h2>
+                
             </div>
-            <div id="iconBox">
-                <div class ="icon">
-                    <a href="serpinski.html">3D Serpinksi Triangle</a>
-                    <img src="misc/pyramidIcon.PNG" width="300px" height = "200px" alt="">
+            <div id="mainBox">
+                
+    
+                <div id="icon" class="box">
+                    <a href="realtime.html" id="label">Fractal Sandbox</a>
+                    <img src="misc/x1.png" width="300px" height = "200px" >
                 </div>
-    
-                <div class="icon">
-                    <a href="realtime.html" id="label1">Fractal Sandbox</a>
-                    <img src="misc/satanic.PNG" width="300px" height = "200px" alt="">
-    
-                </div>
-    
-                <div class ="icon">
-                    <a href="saul.html" id="label3">3D Parametric Surfaces</a>
-                    <img src="misc/para.png" width="300px" height = "200px" alt="">
-    
-                </div>  
 
-                <div class ="icon">
-                    <a href="meadow.html" id="label4">Meadow</a>
-                    <img src="misc/mmmm.png" width="300px" height = "200px" alt="">
-    
-                </div>  
+                <div id="GalleryBox" class="box">
+                    <p>Gallery</p>
+                </div>
     
                 
-    
-    
-    
-                 
-    
+
+            
             </div>
     
-            <div id="GalleryBox">
-                <div id="GalleryTitle" class="GalleryItem"><p>Gallery</p></div>
-                
-    
-    
-            </div>
+            
 
         </div>
         

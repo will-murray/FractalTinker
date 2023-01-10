@@ -1,0 +1,79 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>3D Serpinski Triangle</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <style>
+            #ButtonHeader{
+                display: grid;
+                grid-template-columns: auto 200px;
+                
+
+            }
+
+            #ThreeRender{
+                display: grid;
+                grid-template-columns: 200px auto;
+
+                overflow: hidden;
+                margin: 0px;
+            }
+
+           
+            button{
+                border-style: solid;
+                border-radius: 10px;
+                font-family: monospace;
+                font-size: 25px;
+                
+            }
+            button:hover{
+                font-style: italic;
+                color: white;
+            }
+
+            #trigger{
+                background-color: cornflowerblue;
+            }
+            #TexButton{
+                background-color: orange;
+            }
+
+            
+
+        </style>
+
+        <!-- Import maps polyfill -->
+        <!-- Remove this when import maps will be widely supported -->
+        <script
+            async
+            src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+        ></script>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "./build/three.module.js"
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div id="ButtonHeader">
+            <button id="trigger">SERPINSKIFY!</button>
+            <button id="TexButton">Details</button>
+        </div>
+
+        <div id="ThreeRender">
+            <script type="module" src="client.js"></script>  
+        </div>
+    
+           
+            
+
+
+        
+    </body>
+</html>
