@@ -1,4 +1,3 @@
-
 export default class Complex {
     
     constructor(real,img) {  // Constructor
@@ -10,11 +9,13 @@ export default class Complex {
     }
 
     square(){
+        
+
         let real = this.real;
 
         //this.real = Math.sin(real**2 * real**5) % 23;// modular form
         //this.real = Math.E**(Math.tan(this.real)) - Math.E**(Math.tan(this.img));
-        this.real = (Math.cos(this.real**2) - Math.sin(this.img**2)) % 3;
+        // this.real = (Math.cos(this.real**2) - Math.sin(this.img**2)) % 3;
         //this.real = Math.sqrt((this.real**2)) - Math.sqrt((this.img**2)) % 11;
         //this.real = Math.E**(Math.sqrt((this.real**2))) - Math.E**(Math.sqrt((this.img**2)));
         //this.real = Math.tanh(Math.sqrt(this.real**2)) %3 - (Math.sin(Math.sqrt(this.img**2)) %7

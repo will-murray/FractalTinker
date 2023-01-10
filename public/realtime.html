@@ -9,7 +9,7 @@
         
 
             body{
-                background-color: grey;
+                background-color: black;
            }
 
             #coordinates{
@@ -22,22 +22,27 @@
                 font-size: 10px;
             }
 
-            
+            #lowerDisplay{
+                display: flex;
+                flex-flow: column;
+                justify-content: left;
+            }            
 
             #outerGrid{
 
                 display: grid;
                 grid-template-columns:  700px auto;
                 background-color: white;
-
-                border-style: hidden;
+                border-style: solid;
                 border-radius: 10px;
                 margin: 40px 40px 40px 40px;
+                border-color: cornflowerblue;
                 
             }
+
             #innerGrid{
                 display: grid;
-                grid-template-rows: 100px 100px auto;
+                grid-template-rows: 50px 100px auto;
                 background-color: cornflowerblue;
 
                 border-right: solid;
@@ -45,6 +50,8 @@
                 border-bottom: solid;
                 border-color: cornflowerblue;
                 border-width: 5px;
+                padding-left: 20px;
+                
 
                 
             }
@@ -56,28 +63,49 @@
                 border-width: 5px;
             }
 
+            #GUI{
+                display: grid;
+                grid-template-columns: 50% 50%;
+            }
             
-            
-            .GUIbox{
-                display: flex;
-                flex-flow: column;
-                justify-content: space-evenly;
-                margin: 20px 20px 20px 20px ;
-                justify-content: center;
-
-
-                
+            #headerBox{
+        
+                padding-left: 20px;
+                margin-bottom: 10px;
                 font-family: monospace;
                 font-size: 15px;
+
+            }
+
+
+            #BtnBox{
+                display: flex;
+                flex-flow: row;
+                justify-content:space-evenly;
+                padding: 10px 10px 10px 10px;
+                
+
+            }
+
+            #BtnBox button{
+                border:solid;
+                border-radius: 8px;
 
             }
             #userInput{
                 display: flex;
                 flex-flow: column;
                 
-                border: solid;
+                padding-left: 20px;
+                padding-right: 20px;
             }
 
+            .inputBox{
+                display:grid ;
+                grid-template-columns: 50% 50%;
+            }
+
+            
 
 
             button{
@@ -100,7 +128,7 @@
             
             
 
-            @media all and (max-width:800px){
+            @media all and (max-width:1000px){
                 #outerGrid{
 
                     display: flex;
@@ -109,9 +137,29 @@
                     margin: 40px 40px 40px 40px;
 
                 }
-        }
+            }
+
+            #ThreeCanvas{
+                padding-top: 10px;
+                display: flex;
+                flex-flow: row;
+                justify-content: center;
+            }
             
+            #goBTN{
+                background-color: green;
+            }
             
+            name{
+                font-family: monospace;
+                font-size: 25px;
+            }
+            .input{
+                border-style: solid;
+                border-radius: 5px;
+                font-size: 20px;
+                font-family: monospace;
+            }
         </style>
 
 
@@ -127,20 +175,72 @@
             </div>
             
             <div class="gridItem" id="innerGrid">
-                <div class="GUIbox">
-                    <h1 id="modeLabel">Julia Mode</h1>
+    
+                <div id="headerBox">
+                    <h1 id="modeLabel">Dynamic Mode</h1>
                 </div>
-                <div id="BtnBox" class="GUIbox">
-                    <button id="changeModeBtn">Change Mode</button>
-                </div>
-                
+                <div id="GUI">
+                    <div id="BtnBox">
+                        <button id="changeModeBtn">Change Mode</button>
+                        <button id="inverter">Invert</button>
+                        <button id="goBTN">GO!</button>
+                    </div>
+
+                    <div id="userInput">
+                        <div class="inputBox">
+                            <name>ZOOM</name>
+                            <input id = "zoomInput" class="input" type="text">
+                        </div>
+                        <div id="colorInput" class="inputBox">
+                            <name>COLORWAVE</name>
+                            <select class="input" id="colorChoice">
+                                <option>0 : Watermelon</option>
+                                <option>1 : Cicely:)</option>
+
+                            </select>
+                        </div>
+                        <div id="functionInput" class="inputBox">
+                            <name>FUNCTION</name>
+                            <select class="input" id = "functionChoice">
+                                <option>0 : Mandlebrot</option>
+                                <option>1 : Modular Function</option>
+                                <option>2 : Shart</option>
+
+                            </select>
+
+                        </div>
+                        
+
+                    </div>
+
+                </div>    
+                    
+                <div id="ThreeCanvas"></div>
+
                     
             </div>
 
             
         </div>
-        
+
+        <div id="lowerDisplay">
+            <h1 id="zoomChoice">TODO!</h1>
+            <h1 id="colorChoice">TODO!</h1>
+            <h1 id="functionChoice">TODO!</h1>
+
+        </div>
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "./build/three.module.js"
+                }
+            }
+        </script>
         <script src="./fractalLIB/CanvasUtil.js"></script>
+        <script type ="module" src="./colorwave.js"></script>
         <script type= "module" src ="./fractalLIB/realtime.js"></script>
+
+        
+        
     </body>
 </html>

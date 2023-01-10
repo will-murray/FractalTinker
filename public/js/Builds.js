@@ -194,19 +194,19 @@ export function addGround(scene){
 
 export function addAxis(scene){
     let xmat = new THREE.LineBasicMaterial( {color:0x0000ff});
-    let xpoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(10,0,0)]
+    let xpoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(1,0,0)]
     let xgeo = new THREE.BufferGeometry().setFromPoints(xpoints);
     let xline = new THREE.Line(xgeo,xmat);
 
     let ymat = new THREE.LineBasicMaterial( {color:0x00ff00});
-    let ypoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,10)]
+    let ypoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,1)]
     let ygeo = new THREE.BufferGeometry().setFromPoints(ypoints);
     let yline = new THREE.Line(ygeo,ymat);
 
 
 
     let zmat = new THREE.LineBasicMaterial( {color:0xff0000});
-    let zpoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(0,10,0)]
+    let zpoints = [new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0)]
     let zgeo = new THREE.BufferGeometry().setFromPoints(zpoints);
     let zline = new THREE.Line(zgeo,zmat);
 
@@ -215,3 +215,211 @@ export function addAxis(scene){
     scene.add(zline);
 
 }
+const loader = new THREE.TextureLoader();
+
+export function growMeadow(scene){
+    let material = new THREE.MeshBasicMaterial({
+        map: loader.load('./misc/grass.jpg'),
+        side:THREE.DoubleSide
+    })
+    let geometry = new THREE.CircleGeometry(700)
+    let mesh = new THREE.Mesh(geometry,material);
+    mesh.rotation.x = -0.5 * Math.PI;
+    scene.add(mesh)
+}
+
+export function buildCharacterMesh(scene){
+    return new Character(scene)
+
+}
+
+class Character{
+    constructor(scene){
+        this.offset = 0;    
+        this.bodyMesh = this.buildBodyMesh()
+        this.render(scene)
+    }
+
+    render(scene){
+        for(let i=0;i<this.bodyMesh.length;i+=1){
+            scene.add(this.bodyMesh[i])
+        }
+    }
+
+    buildBodyMesh(){
+        let meshList = [];
+        for(let i=1;i<10;i+=1){
+            meshList.push(this.getBodySegment(0.2*i))
+        }
+        return meshList;
+
+    }
+    getBodySegment(radius){
+        let material = new THREE.MeshBasicMaterial({
+            color: 0x324534,
+            side: THREE.DoubleSide
+        })
+        let geometry = new THREE.SphereGeometry(radius,20,20)
+        let mesh = new THREE.Mesh(geometry,material)
+        mesh.position.set(0,5,this.offset+radius/2);
+        this.offset += radius;
+        return mesh;
+
+    }
+
+    
+}
+
+
+export function buildTree(scene){
+    let tree = new recursiveTree([5,0,5])
+    for(let i=0;i<tree.branchList.length;i++){
+        scene.add(tree.branchList[i])
+    }
+}
+class recursiveTree{
+
+    constructor(pos){
+        this.branchList = [];
+        this.quad = 0;
+        this.buildTree(pos,this.quad,2)
+    }
+
+    buildTree(pos,quad,offset){
+        for(let i=0;i<4;i++){
+            let dead = Math.floor(Math.random() * 4);
+
+            if(!dead){
+                let newpos = this.getNewPosition(pos,i,offset)
+                let branch = this.buildBranch(pos,newpos);
+                this.branchList.push(branch)
+                this.buildTree()
+
+            }
+            
+        }
+    }
+
+    getNewPosition(pos,i,offset){
+        let result = [];
+        if(i == 0){
+            result.push(pos[0] + offset)
+            result.push(pos[1] + offset)
+            result.push(pos[2] + offset)
+
+        }
+        else if(i == 2){
+            result.push(pos[0] - offset)
+            result.push(pos[1] + offset)
+            result.push(pos[2] + offset)
+        }
+        else if(i == 3){
+            result.push(pos[0] - offset)
+            result.push(pos[1] + offset)
+            result.push(pos[2] - offset)
+        }
+        else{
+            result.push(pos[0] + offset)
+            result.push(pos[1] + offset)
+            result.push(pos[2] - offset)
+        }
+        return result
+    }
+
+    buildBranch(pos,newpos){
+        let v1 = new THREE.Vector3(pos[0], pos[1], pos[2])
+        let v2 = new THREE.Vector3(newpos[0], newpos[1], newpos[2])
+        let curve =  new THREE.LineCurve3(v1,v2)
+        return curve
+
+
+    }
+
+}
+
+export function createDome(scene){
+    let material = new THREE.MeshBasicMaterial({
+        map: loader.load("./misc/starrynight.jpg"),
+        side: THREE.DoubleSide
+    })
+    let geometry = new THREE.SphereGeometry(1200,50,50);
+    let mesh = new THREE.Mesh(geometry,material);
+
+    scene.add(mesh);
+}
+
+export function directionalLight(scene){
+    let light = new THREE.PointLight(0xffffff,1)
+    let dlight = new THREE.DirectionalLight(0xffffff, 0.5 )
+    light.position.set(0,1000,0)
+    light.castShadow = true;
+    scene.add(light)
+}
+
+export function bigPlane(scene){
+    let material = new THREE.MeshBasicMaterial({
+        color: 0xee0000,
+        side: THREE.DoubleSide
+    })
+    let geometry = new THREE.PlaneGeometry(4000,4000);
+    let mesh = new THREE.Mesh(geometry,material);
+    mesh.position.set(0,-700,0)
+    mesh.rotation.x = -0.5* Math.PI;
+    scene.add(mesh)
+}
+
+export function keiriousGorge(pos,rad){
+    let photoChoice = Math.floor(Math.random() * 6)
+    console.log(photoChoice)
+    let material = new THREE.MeshBasicMaterial({
+        map: loader.load(photoDictionary[photoChoice]),
+        side: THREE.DoubleSide
+    })
+    // let geometry = new THREE.SphereGeometry(rad,20,20);
+    let geometry = new THREE.BoxGeometry(rad,rad,rad);
+    let mesh = new THREE.Mesh(geometry,material);
+    mesh.position.set(pos[0], pos[1], pos[2])
+    return mesh;
+}
+
+export function daddyK(scene){
+    for(let i=0;i< 500;i+=1){
+        let pos = [rand(),rand(),rand()];
+        let rad = Math.floor(Math.random() *30);
+        scene.add(keiriousGorge(pos,rad));
+
+    }
+}
+
+function rand(){
+    let result =3*Math.floor(Math.random() * 200);
+    let flip = Math.floor(Math.random()*10)%2 == 0
+    if(flip){
+        result*=-1;
+    }
+    return result;
+
+}
+
+
+let photoDictionary = {
+    0 : "./misc/simon.png",
+    1 : "./misc/aidan.png",
+    2 : "./misc/keir.jpg",
+    3 : "./misc/matthew.png",
+    4 : "./misc/alex.png",
+    5 : "./misc/will.png" 
+
+}
+
+export function whiteBackground(scene){
+    let material = new THREE.MeshBasicMaterial({color:0xFFFF00, side:THREE.DoubleSide});
+    let geometry = new THREE.BoxGeometry(5,5,5)
+
+    let mesh = new THREE.Mesh(geometry,material);
+
+    scene.add(mesh);
+
+
+}
+

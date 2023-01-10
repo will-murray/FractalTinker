@@ -1,7 +1,8 @@
 
 import Complex from "./Complex.js";
 import * as Conversion from "./Conversion.js"
-
+import selectFunction from "./functionSet.js";
+import selectColor from "./colorSet.js";
 export default class FractalCanvas{
     
 
@@ -14,17 +15,23 @@ export default class FractalCanvas{
         this.inc = this.span/366;
         this.state = 0;
         this.stateMap = {
-            0 : "Julia",
-            1 : "Mandlebrot",
-            2 : "Depth"
+            0 : "Dynamic",
+            1 : "Static",
         }
         this.borderData = []
         this.cidx = [0,1,2]
         this.cursX = 0;
         this.cursY = 0;
 
+
         this.canvas = document.getElementById("display");
         this.ctx = this.canvas.getContext('2d');
+
+        this.fchoice = 0
+        this.fns = selectFunction(this.fchoice);
+
+        this.colorChoice = 0
+        this.color = selectColor(this.colorChoice)
 
 
     }
@@ -32,50 +39,21 @@ export default class FractalCanvas{
     init(){
         this.canvas.height = this.size;
         this.canvas.width = this.size;
-        let inverterBTN = document.createElement("button");
-            inverterBTN.innerHTML = "Invert";
-            inverterBTN.addEventListener("click", () =>{
-                this.colorInvert();
-            })
-        document.getElementById("BtnBox").appendChild(inverterBTN);
-        this.changeMode()
+        
         
     }
 
     changeMode(){
-        if(this.state == 2){
-            this.disableDepthMode();
-            this.state = 0;
-
-        }else{
-            this.state += 1;
-        }
-        document.getElementById("modeLabel").innerHTML = this.stateMap[this.state];
         if(this.state == 0){
-             this.juliaSet(this.size/2,this.size/2);
-        }
-        else if(this.state == 1){
             this.mandlebrotSet()
-            this.borderData = this.getRawGridData(4);
-             
-            let borderBTN = document.createElement("button");
-            borderBTN.innerHTML = "Display Border (Not working)";
-            borderBTN.addEventListener("click", () =>{
-                this.getBorder();
-            })
-
-            
-            document.getElementById("BtnBox").appendChild(borderBTN);
-            
-        }
-        else{
-            let btnbox = document.getElementById("BtnBox");
-            btnbox.removeChild(btnbox.lastChild);
-
-            this.enableDepthMode();
+            this.state = 1
+        }else{
+            this.juliaSet(0,0)
+            this.state = 0
         }
 
-
+        document.getElementById("modeLabel").innerHTML = this.stateMap[this.state] + " Mode";
+        
     }
 
 
@@ -171,7 +149,7 @@ export default class FractalCanvas{
                     let l3 = this.linearIndex(px[0], px[1]+1)    //lower left
                     let l4 = this.linearIndex(px[0] + 1, px[1]+1)  //lower right
 
-                    let col = this.colour(result);
+                    let col = this.color(result);
                     let a = 255;
                     
                     
@@ -255,7 +233,7 @@ export default class FractalCanvas{
                     let px = Conversion.complexToPixels(i,j,this.span,this.size,this.origon);
                     let k = this.linearIndex(px[0],px[1]);
                     
-                    let col = this.colour(result);
+                    let col = this.color(result);
                     
                     imgData.data[k] = col[this.cidx[0]];
                     imgData.data[k+1] = col[this.cidx[1]];
@@ -290,7 +268,7 @@ export default class FractalCanvas{
    
     sequenceLengthIter(z,c,iteration){
         while(z.magnitude() < 2 && iteration < this.MAXSEQLENGTH){
-            z.square()
+            this.fns(z)
             let next = z;
             next.plus(c);
             iteration++;
@@ -335,29 +313,8 @@ export default class FractalCanvas{
         this.juliaSet(0,0)
     }
     
-    colour(t){
-        return [    
-                    12*parseInt(t)*Math.sin(11*t),
-                    15*parseInt(4*t)*Math.cos(12*t),
-                    8*parseInt(2*(t))
+    
 
-                ];
-            }
-    //     return [    
-    //     (6*parseInt(t)),
-    //     150*Math.abs(Math.cos((6*parseInt(t)))),
-    //     150*Math.abs(Math.sin(((6*parseInt(t)))))
-    // ];
-
-    // return [    
-    //         (6*parseInt(t)),
-    //         150*Math.abs( Math.cos((6*parseInt(t))) **2 ),
-    //         150*Math.abs( Math.sin((6*parseInt(t))) **2 )
-
-
-
-    //     ];
-    // }
 
 
 };

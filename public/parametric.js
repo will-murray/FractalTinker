@@ -34,8 +34,8 @@ Builds.addAxis(scene);
 function parabaloid(){
     let resolution = 0.05
     let count = 0;
-    for(let r=0;r<=2;r+= resolution){
-        for(let theta = 0;theta<=Math.PI*2;theta+=resolution){
+    for(let r=0;r<=3;r+= resolution){
+        for(let theta = 0;theta<=6;theta+=resolution){
             let geo = new THREE.BoxGeometry(resolution,resolution,resolution);
             let mat = new THREE.MeshBasicMaterial({
                 color: 0xafabef,
@@ -45,6 +45,8 @@ function parabaloid(){
             let p = positionVector(r, theta);
             point.position.set(p[0],p[1],p[2]);
             scene.add(point);
+                
+            
             count+=1;
         }
     }
@@ -58,9 +60,10 @@ function positionVector(r, theta){
     
     return [
         
-        r*(Math.tan(theta)), 
-        4-r**2,
-        3*r*Math.sin(theta)
+        Math.sin(r*theta), 
+        Math.cos(r),
+        Math.sin(r)
+        
         
     ]
         
