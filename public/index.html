@@ -5,6 +5,8 @@
         <meta charset="utf-8" />
         <title>Will's 3D Portfolio</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/x-icon" href='./misc/favicon.png'>
+
         
         <style>
             body{
@@ -23,51 +25,36 @@
                 flex-flow:row;
                 justify-content: space-evenly;
                 font-family: monospace;
+
+                background-image: url('./misc/banner.png');
                 
 
             }
 
+                    
             #Title{
                 font-size: 40px;
-                border-bottom: solid;
-                color: white;
-            }            
+
+                animation-name: titleFade;
+                animation-duration: 3s;
+                animation-iteration-count: 1;
+
+            }  
+            
+            @keyframes titleFade {
+                from{
+                    font-size: 1px;
+                }
+                to{
+                    font-size: 40px;
+                }
+                
+            }
 
             #mainBox{
-                display:grid;
+                display: grid;
                 grid-template-columns: auto auto;
-                justify-content: space-evenly;
-                
-            }
-
-            #icon{
-                border: solid;
-                border-color: whitesmoke;
-                border-radius: 10px;
-                background-color: whitesmoke;
-                display: flex;
-                flex-flow: column;
-            }
-            a{
-                
-                font-family:monospace;
-                font-size: 25px;
-                text-decoration: none;
-            }
-
-            #GalleryBox p{  
-                font-family: monospace;
-                font-size: 30px;
-            }
-            
-            #GalleryBox{
-                border: solid;
-                border-radius: 8px;
-                background-color: cornflowerblue;
-                display: flex;
-                flex-flow: row;
-                justify-content: center;
-
+                margin:10% 10%
 
                 
             }
@@ -77,7 +64,72 @@
                 padding-top: 50px;
                 padding-bottom: 50px;
 
+                display: flex;
+                flex-flow: row;
+                justify-content: center;
+                background-color: white;
+
             }
+            
+            
+            
+
+            #icon{
+                border: solid;
+                border-color: whitesmoke;
+                margin-left: 40%;
+                margin-right: 5%;
+                
+                animation-duration: 3s;
+                animation-iteration-count: 1;
+
+                animation-name: slideIcon;
+
+            }
+            @keyframes slideIcon {
+                from{
+                    margin-right: 0%;
+                    margin-left: 0%;
+
+                }
+                to{
+                    margin-right: 5%;
+                    margin-left: 40%;
+
+                }
+            }
+            #GalleryBox{
+                animation-duration: 3s;
+                animation-iteration-count: 1;
+                animation-name: slideGallery;
+
+                margin-right: 40%;
+                margin-left: 5%;
+                
+                
+            }
+            @keyframes slideGallery {
+                from{
+                    margin-right: 0%;
+                    margin-left: 0%;
+
+                }
+                to{
+                    margin-right: 40%;
+                    margin-left: 5%;
+
+                }
+            }
+
+
+            p{  
+                font-family: monospace;
+                font-size: 30px;
+            }
+            
+            
+
+            
             
             
             
@@ -101,8 +153,7 @@
                 
     
                 <div id="icon" class="box">
-                    <a href="realtime.html" id="label">Fractal Sandbox</a>
-                    <img src="misc/x1.png" width="300px" height = "200px" >
+                    <p>Sandbox</p>
                 </div>
 
                 <div id="GalleryBox" class="box">
@@ -119,7 +170,10 @@
         </div>
         
 
+
         <script src="./indexScript.js"></script>
+
+
 
         
         
