@@ -30,7 +30,7 @@ export default class FractalCanvas{
         this.fchoice = 0
         this.fns = selectFunction(this.fchoice);
 
-        this.colorChoice = 0
+        this.colorChoice = 2
         this.color = selectColor(this.colorChoice)
 
 
@@ -38,9 +38,8 @@ export default class FractalCanvas{
 
     init(){
         this.canvas.height = this.size;
-        this.canvas.width = this.size;
-        
-        
+        this.canvas.width = this.size;    
+            
     }
 
     changeMode(){
@@ -48,6 +47,7 @@ export default class FractalCanvas{
             this.mandlebrotSet()
             this.state = 1
         }else{
+            
             this.juliaSet(0,0)
             this.state = 0
         }
@@ -222,6 +222,13 @@ export default class FractalCanvas{
 
         let iBound = this.span + Math.abs(this.origon[0]);
         let jBound = this.span + Math.abs(this.origon[1]);
+        let orgionPixel = Conversion.NScomplexToPixels(this.origon[0],this.origon[1],this.span,this.size);
+        orgionPixel[0] = 350 - orgionPixel[0];
+        orgionPixel[1] = 350 - orgionPixel[1];
+
+
+        console.log("Origon pixel location : ",orgionPixel);
+
         for(let i =-1*iBound;i<iBound;i+=this.inc){
             for(let j =-1*jBound;j<jBound;j+=this.inc){
             
@@ -301,7 +308,7 @@ export default class FractalCanvas{
     
     linearIndex(x,y){
         
-        let rowIdx = (y*this.size*4)
+        let rowIdx = ( (y)* this.size*4)
         let colIdx = 4*x
         
         return rowIdx+colIdx;

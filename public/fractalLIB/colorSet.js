@@ -1,3 +1,4 @@
+
 let cSet = {
     0 : function Watermelon(t){
         return [    
@@ -16,6 +17,14 @@ let cSet = {
             parseInt(Math.abs(50*Math.sin(10*t)))
 
 
+        ]
+    },
+
+    2: function foo(t){
+        return [
+            10*parseInt(t*Math.abs(Math.sin(3*t) + Math.cos(4*t))) + 20,
+            10*parseInt(t*Math.abs(Math.sin(3*t) + Math.cos(4*t)))+ 100,
+            parseInt(6*t) + 100
         ]
     }
 }

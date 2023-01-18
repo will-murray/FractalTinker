@@ -13,7 +13,7 @@ camera.lookAt(0,0,0)
 
 
 let cidx = [0,1,2]
-let colorChoice = 0
+let colorChoice = 2
 let color = selectColor(colorChoice)
 
 export function changeColorChoice(newColor){

@@ -15,8 +15,8 @@ let fSet = {
 
     2: function shart(z){
         let real = z.real
-        z.real = Math.cos(z.real*6)
-        z.img = Math.sin(z.img*6)
+        z.real =Math.cos(2* real**2 +z.img**2)
+        z.img = Math.E**Math.sin(z.img * z.real)
     }
 }
 

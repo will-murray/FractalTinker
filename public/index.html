@@ -13,9 +13,9 @@
                  background-color: black;
             }
             #Wrapper{
-                display: flex;
-                flex-flow: column;
-                justify-content: space-around;
+                display: grid;
+                grid-template-rows: auto auto auto;
+
             }
 
             
@@ -30,11 +30,16 @@
                 
 
             }
+            #footer{
+                color: white;
+            }
+
 
                     
             #Title{
                 font-size: 40px;
-
+                color: white;
+                background-color: black;
                 animation-name: titleFade;
                 animation-duration: 3s;
                 animation-iteration-count: 1;
@@ -68,15 +73,16 @@
                 flex-flow: row;
                 justify-content: center;
                 background-color: white;
-
+                border: solid;
+                border-color: whitesmoke;
+                border-radius: 5px;
             }
             
             
             
 
             #icon{
-                border: solid;
-                border-color: whitesmoke;
+                
                 margin-left: 40%;
                 margin-right: 5%;
                 
@@ -164,7 +170,10 @@
 
             
             </div>
-    
+            
+            <div id="footer">
+                <p>Developed by William Murray</p>
+            </div>
             
 
         </div>

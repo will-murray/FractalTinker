@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from './jsm/controls/OrbitControls.js'
-import * as SceneUtil from './js/SceneUtil.js'
-import * as Builds from './js/Builds.js'
-import Complex from './fractalLIB/Complex.js'
+import * as SceneUtil from '../js/SceneUtil.js'
+import * as Builds from '../js/Builds.js'
+import Complex from '../fractalLIB/Complex.js'
 let span = 2.5;
 let inc = 0.01;
 let MaxSeqLength = 20;
