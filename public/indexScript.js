@@ -1,5 +1,7 @@
 let Gallery = document.getElementById("GalleryBox")
 let SandboxBTN = document.getElementById("icon")
+
+
 Gallery.onclick = function(){
     window.open("gallery.html")
 }

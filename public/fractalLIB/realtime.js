@@ -7,6 +7,10 @@ import { changeColorChoice } from '../colorwave.js';
 
 let complexPlane = new FractalCanvas();
 document.body.onload = function initCanvas(){
+    let message = document.createElement("h1");
+    message.innerHTML = "move your cursor around this ^ canvas"
+    message.style.color = "White"
+    document.getElementById("lowerDisplay").appendChild(message);
     complexPlane.init();
 }
 
@@ -44,7 +48,10 @@ document.getElementById("goBTN").onclick = function updateDisplay(){
     
 
 }
-
+complexPlane.canvas.onmouseenter = function fadeMessage(){
+    let lowerDisplay = document.getElementById("lowerDisplay");
+    lowerDisplay.removeChild(lowerDisplay.lastChild);
+}
 complexPlane.canvas.onmousemove = function getJuliaFrame(event){
     if(complexPlane.state == 0){
         complexPlane.juliaSet(event.x,event.y);

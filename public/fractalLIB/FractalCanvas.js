@@ -3,6 +3,7 @@ import Complex from "./Complex.js";
 import * as Conversion from "./Conversion.js"
 import selectFunction from "./functionSet.js";
 import selectColor from "./colorSet.js";
+import * as States from './state.js';
 export default class FractalCanvas{
     
 
@@ -17,6 +18,7 @@ export default class FractalCanvas{
         this.stateMap = {
             0 : "Dynamic",
             1 : "Static",
+            2: "Depth"
         }
         this.borderData = []
         this.cidx = [0,1,2]
@@ -25,9 +27,11 @@ export default class FractalCanvas{
 
 
         this.canvas = document.getElementById("display");
-        this.ctx = this.canvas.getContext('2d');
+        this.canvas.willReadFrequently = true;
+        this.ctx = this.canvas.getContext('2d', {willReadFrequently: true});
+        
 
-        this.fchoice = 0
+        this.fchoice = 3
         this.fns = selectFunction(this.fchoice);
 
         this.colorChoice = 2
@@ -41,81 +45,19 @@ export default class FractalCanvas{
         this.canvas.width = this.size;    
             
     }
-
+    
     changeMode(){
-        if(this.state == 0){
-            this.mandlebrotSet()
-            this.state = 1
-        }else{
-            
-            this.juliaSet(0,0)
-            this.state = 0
+        this.state +=1
+        if(this.state == 3){
+            this.state = 0;
         }
+        
+        let action = States.dict(this,this.state)
+        action()
 
         document.getElementById("modeLabel").innerHTML = this.stateMap[this.state] + " Mode";
         
     }
-
-
-    enableDepthMode(){
-        
-        this.MAXSEQLENGTH = 10;
-        this.mandlebrotSet()
-        let zoomBTN = document.createElement("button");
-        zoomBTN.innerHTML = "ZOOM";
-        zoomBTN.id = "zoomBTN";
-
-        let depthGage = document.createElement("h2");
-        depthGage.id = "depthGage";
-        depthGage.innerHTML = "Maximum Depth = " +this.MAXSEQLENGTH;
-        
-
-        document.getElementById("BtnBox").appendChild(zoomBTN);
-        document.getElementById("BtnBox").appendChild(depthGage);
-
-        zoomBTN.addEventListener("click", () =>{
-            this.MAXSEQLENGTH+=10;
-            this.mandlebrotSet();
-            document.getElementById("depthGage").innerHTML = "Maximum Depth = " +this.MAXSEQLENGTH;
-        });
-    }
-
-    
-
-
-    disableDepthMode(){
-        let BtnBox = document.getElementById("BtnBox");
-        BtnBox.removeChild(BtnBox.lastChild);
-        BtnBox.removeChild(BtnBox.lastChild);
-
-
-        this.MAXSEQLENGTH = 150;
-    }
-
-    getBorder(){
-        console.log("-------------------\nBORDER FNS\n-------------------");
-        this.ctx.clearRect(0,0 ,this.size, this.size);
-        let imgData = this.ctx.getImageData(0,0,this.size,this.size);
-
-        for(let i =0;i<this.borderData.length;i++){
-            for(let j =0;j<this.borderData.length;j++){
-                if(this.borderData[i][j] == 0){
-                    let index = this.linearIndex(i,j);
-                    console.log();
-
-                    imgData.data[index] = 100;
-                    imgData.data[index+1] = 100;
-                    imgData.data[index+2] = 100;
-                    imgData.data[index+3] = 1;
-
-                }
-            }   
-        }
-        this.ctx.putImageData(imgData,1,1);
-
-    }
-
-
     juliaSet(x,y){
         this.cursX = x
         this.cursY = y
