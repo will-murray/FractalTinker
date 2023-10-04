@@ -17,6 +17,7 @@ let colorChoice = 2
 let color = selectColor(colorChoice)
 
 export function changeColorChoice(newColor){
+    console.log(newColor);
     colorChoice = newColor
     color = selectColor(colorChoice)
     clearMesh()

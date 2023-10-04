@@ -6,13 +6,7 @@ import { changeColorChoice } from '../colorwave.js';
 
 
 let complexPlane = new FractalCanvas();
-document.body.onload = function initCanvas(){
-    let message = document.createElement("h1");
-    message.innerHTML = "move your cursor around this ^ canvas"
-    message.style.color = "White"
-    document.getElementById("lowerDisplay").appendChild(message);
-    complexPlane.init();
-}
+
 
 document.getElementById("changeModeBtn").onclick = function toggleFunctionality(){
     complexPlane.changeMode();
@@ -22,7 +16,9 @@ document.getElementById("inverter").onclick = function invertColors(){
     colorWaveInvert()
 }
 
-document.getElementById("goBTN").onclick = function updateDisplay(){
+
+
+function updateDisplay(){
     let z = parseFloat(document.getElementById("zoomInput").value)
     if(!Number.isNaN(z)){
         complexPlane.span = z;
@@ -47,6 +43,17 @@ document.getElementById("goBTN").onclick = function updateDisplay(){
 
     
 
+}
+document.getElementById("goBTN").onclick = updateDisplay()
+document.body.onload = function initCanvas(){
+    let message = document.createElement("h1");
+    message.innerHTML = "move your cursor around this ^ canvas"
+    message.style.color = "White"
+    document.getElementById("lowerDisplay").appendChild(message);
+    complexPlane.init();
+    complexPlane.fchoice = 0;
+    complexPlane.colorChoice=3;
+    updateDisplay();
 }
 complexPlane.canvas.onmouseenter = function fadeMessage(){
     let lowerDisplay = document.getElementById("lowerDisplay");

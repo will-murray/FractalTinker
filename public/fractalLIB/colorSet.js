@@ -26,7 +26,18 @@ let cSet = {
             10*parseInt(t*Math.abs(Math.sin(3*t) + Math.cos(4*t)))+ 100,
             parseInt(6*t) + 100
         ]
+    },
+
+    3: function bar(t){
+        return[
+        12*parseInt((t % 5)),
+        25*parseInt(Math.abs(15*(Math.cos(10*(t % 11))))),
+        21*parseInt((t%7))
+        ]
+
     }
+
+    
 }
 
 export default function selectColor(idx){
