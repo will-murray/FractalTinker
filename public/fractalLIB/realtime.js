@@ -19,14 +19,11 @@ document.getElementById("inverter").onclick = function invertColors(){
 
 
 function updateDisplay(){
-    let z = parseFloat(document.getElementById("zoomInput").value)
-    if(!Number.isNaN(z)){
-        complexPlane.span = z;
-        complexPlane.inc = z/366
-    }
     
+    console.log("clicked")
 
     let newFchoice = document.getElementById("functionChoice").value
+    console.log("new function choice = ", newFchoice)
     newFchoice = parseInt(newFchoice.slice(0,1))
 
     complexPlane.fchoice = newFchoice
@@ -44,7 +41,10 @@ function updateDisplay(){
     
 
 }
-document.getElementById("goBTN").onclick = updateDisplay()
+
+
+document.getElementById("goBTN").onclick = updateDisplay
+
 document.body.onload = function initCanvas(){
     let message = document.createElement("h1");
     message.innerHTML = "move your cursor around this ^ canvas"
@@ -55,10 +55,10 @@ document.body.onload = function initCanvas(){
     complexPlane.colorChoice=3;
     updateDisplay();
 }
-complexPlane.canvas.onmouseenter = function fadeMessage(){
-    let lowerDisplay = document.getElementById("lowerDisplay");
-    lowerDisplay.removeChild(lowerDisplay.lastChild);
-}
+// complexPlane.canvas.onmouseenter = function fadeMessage(){
+//     let lowerDisplay = document.getElementById("lowerDisplay");
+//     lowerDisplay.removeChild(lowerDisplay.lastChild);
+// }
 complexPlane.canvas.onmousemove = function getJuliaFrame(event){
     if(complexPlane.state == 0){
         complexPlane.juliaSet(event.x,event.y);

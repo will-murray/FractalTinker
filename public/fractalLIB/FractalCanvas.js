@@ -2,22 +2,23 @@ import Complex from "./Complex.js";
 import * as Conversion from "./Conversion.js";
 import selectFunction from "./functionSet.js";
 import selectColor from "./colorSet.js";
-import * as States from "./state.js";
-
 
 export default class FractalCanvas {
   constructor() {
-    this.MAXSEQLENGTH = 300;
+    this.MAXSEQLENGTH = 40;
     this.size = 700;
-    this.span = 3;
+    this.span = 1;
     this.origon = [0, 0];
     this.inc = this.span / 366;
     this.state = 0;
-    this.stateMap = {
-      0: "Dynamic",
-      1: "Static",
-      2: "Depth",
-    };
+
+    this.state_map= {
+        0: ["Julia Mode",  () => { this.juliaSet(0,0)}],
+        1 :["Mandlebrot Mode", ()=> {this.mandlebrotSet() } ]
+    }
+  
+
+
     this.borderData = [];
     this.cidx = [0, 1, 2];
     this.cursX = 0;
@@ -39,18 +40,16 @@ export default class FractalCanvas {
     this.canvas.width = this.size;
   }
 
-  changeMode() {
+  
+  changeMode() { 
     this.state += 1;
-    if (this.state == 3) {
-      this.state = 0;
-    }
-
-    let action = States.dict(this, this.state);
-    action();
-
-    document.getElementById("modeLabel").innerHTML =
-      this.stateMap[this.state] + " Mode";
+    this.state = this.state % Object.keys(this.state_map).length
+    const [name, state_fns] = this.state_map[this.state]
+    document.getElementById("modeLabel").innerHTML = name //this should be removed it introduces DOM level dependancies.
+    state_fns()
   }
+
+
   juliaSet(x, y) {
     this.cursX = x;
     this.cursY = y;
@@ -156,7 +155,6 @@ export default class FractalCanvas {
     orgionPixel[0] = 350 - orgionPixel[0];
     orgionPixel[1] = 350 - orgionPixel[1];
 
-    console.log("Origon pixel location : ", orgionPixel);
 
     for (let i = -1 * iBound; i < iBound; i += this.inc) {
       for (let j = -1 * jBound; j < jBound; j += this.inc) {

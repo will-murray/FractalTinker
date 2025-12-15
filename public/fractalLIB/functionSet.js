@@ -14,7 +14,7 @@ let fSet = {
 
     },
 
-    2: function shart(z){
+    2: function cosine(z){
         let real = z.real
         z.real =Math.cos(2* real**2 +z.img**2)
         z.img = Math.E**Math.sin(z.img * z.real)

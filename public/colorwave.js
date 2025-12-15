@@ -17,7 +17,6 @@ let colorChoice = 2
 let color = selectColor(colorChoice)
 
 export function changeColorChoice(newColor){
-    console.log(newColor);
     colorChoice = newColor
     color = selectColor(colorChoice)
     clearMesh()
@@ -84,7 +83,7 @@ function drawUnitBoundry(){
 }
 
 function drawCurve(scene){
-    let max = 40;
+    let max = 1000;
     for(let i = 0; i < max;i += 0.2){
 
         let col = color(i)
